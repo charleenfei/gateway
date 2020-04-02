@@ -47,7 +47,9 @@
     "passport-local": "^1.0.0",
     "portable-fetch": "^3.0.0",
     "reflect-metadata": "^0.1.12",
-    "typescript": "3.2.2"
+    "typescript": "3.2.2",
+    "web3-eth": "^1.2.6",
+    "bignumber.js": "^9.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"
