@@ -33,7 +33,7 @@ describe('Funding controller', () => {
     const databaseService = fundingModule.get<DatabaseService>(DatabaseService);
     insertedInvoice = await databaseService.documents.insert({
       header: {
-        document_id: '0x39393939',
+        documentId: '0x39393939',
       },
       data: { ...invoice },
       ownerId: 'user_id',

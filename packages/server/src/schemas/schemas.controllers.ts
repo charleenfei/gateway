@@ -99,7 +99,7 @@ export class SchemasController {
 
     const oldSchema = await this.databaseService.schemas.findOne({ _id: params.id });
     try {
-      Schema.validateDiff(oldSchema, update);
+      Schema.validateDiff(oldSchema!, update);
       Schema.validate(update);
     } catch (err) {
       throw new BadRequestException(err.message);

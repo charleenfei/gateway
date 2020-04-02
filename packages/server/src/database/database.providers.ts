@@ -6,7 +6,7 @@ import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import { Schema } from '@centrifuge/gateway-lib/models/schema';
 import config from '../config';
 import { DatabaseService } from './database.service';
-import { DocumentRequest } from "@centrifuge/gateway-lib/models/document";
+import { DocumentRequest } from '@centrifuge/gateway-lib/models/document';
 
 // TODO refactor this in mutiple providers,services
 
@@ -62,7 +62,6 @@ const initializeDatabase = async (inMemoryOnly: boolean) => {
  */
 let initializeDatabasePromise;
 
-
 export const databaseServiceProvider = {
   provide: DatabaseService,
   useFactory: async (): Promise<DatabaseService> => {
@@ -71,6 +70,7 @@ export const databaseServiceProvider = {
     if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'functional') {
       testingMode = true;
     }
+    testingMode = false;
     if (!initializeDatabasePromise || testingMode) {
       initializeDatabasePromise = initializeDatabase(testingMode);
     }

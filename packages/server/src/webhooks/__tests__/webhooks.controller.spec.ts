@@ -25,7 +25,6 @@ describe('WebhooksController', () => {
     })
       .compile();
 
-
     const databaseService = webhooksModule.get<DatabaseService>(DatabaseService);
     const centrifugeService = webhooksModule.get<CentrifugeService>(CentrifugeService);
 
@@ -45,11 +44,11 @@ describe('WebhooksController', () => {
       );
 
       const result = await webhooksController.receiveMessage({
-        event_type: EventTypes.DOCUMENT,
-        document_type: DocumentTypes.GENERIC_DOCUMENT,
-        document_id: documentId,
-        to_id: user.account,
-        from_id: '0xRandomId',
+        eventType: EventTypes.DOCUMENT,
+        documentType: DocumentTypes.GENERIC_DOCUMENT,
+        documentId,
+        toId: user.account,
+        fromId: '0xRandomId',
       });
 
       expect(result).toEqual('OK');
@@ -67,7 +66,7 @@ describe('WebhooksController', () => {
               document_id: documentId,
               nfts: [{ owner: 'owner', token_id: 'token_id' }],
             },
-            data: { 'currency': 'USD' },
+            data: { currency: 'USD' },
             fromId: '0xRandomId',
             scheme: 'iUSDF2ax31e',
             attributes:
@@ -87,7 +86,6 @@ describe('WebhooksController', () => {
               },
           },
 
-
         },
         { upsert: true },
       );
@@ -99,17 +97,16 @@ describe('WebhooksController', () => {
       );
       try {
         const result = await webhooksController.receiveMessage({
-          event_type: EventTypes.DOCUMENT,
-          document_type: DocumentTypes.GENERIC_DOCUMENT,
-          document_id: documentId,
-          to_id: '0x4444',
+          eventType: EventTypes.DOCUMENT,
+          documentType: DocumentTypes.GENERIC_DOCUMENT,
+          documentId,
+          toId: '0x4444',
         });
       } catch (e) {
         expect(e.message).toEqual('Webhook Error: User is not present in database');
       }
     });
   });
-
 
   describe('when it receives invalid message', function() {
     it('should do nothing', async function() {

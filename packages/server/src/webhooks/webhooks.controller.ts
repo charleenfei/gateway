@@ -5,7 +5,6 @@ import { DatabaseService } from '../database/database.service';
 import { CentrifugeService } from '../centrifuge-client/centrifuge.service';
 import { unflatten } from '@centrifuge/gateway-lib/utils/custom-attributes';
 
-
 // TODO add this in Common package
 export enum DocumentTypes {
   INVOICE = 'http://github.com/centrifuge/centrifuge-protobufs/invoice/#invoice.InvoiceData',
@@ -37,23 +36,23 @@ export class WebhooksController {
   async receiveMessage(@Body() notification: NotificationMessage) {
     console.log('Receive Webhook', notification);
     try {
-      if (notification.event_type === EventTypes.DOCUMENT) {
+      if (notification.eventType === EventTypes.DOCUMENT) {
         // Search for the user in the database
         const user = await this.databaseService.users
-          .findOne({ $or: [{ account: notification.to_id.toLowerCase() }, { account: notification.to_id }] });
+          .findOne({ $or: [{ account: notification.toId!.toLowerCase() }, { account: notification.toId }] });
         if (!user) {
           throw new Error('User is not present in database');
         }
 
-        if (notification.document_type === DocumentTypes.GENERIC_DOCUMENT) {
+        if (notification.documentType === DocumentTypes.GENERIC_DOCUMENT) {
           const result = await this.centrifugeService.documents.getDocument(
             user.account,
-            notification.document_id,
+            notification.documentId!,
           );
 
           const unflattenedAttributes = unflatten(result.attributes);
           await this.databaseService.documents.update(
-            { 'header.document_id': notification.document_id, 'ownerId': user._id },
+            { 'header.document_id': notification.documentId, 'ownerId': user._id },
             {
               $set: {
                 ownerId: user._id,
@@ -61,14 +60,14 @@ export class WebhooksController {
                 data: result.data,
                 attributes: unflattenedAttributes,
                 scheme: result.scheme,
-                fromId: notification.from_id,
+                fromId: notification.fromId,
 
               },
             },
             { upsert: true },
           );
         } else {
-          throw new Error(`Document type ${notification.document_type} not supported`);
+          throw new Error(`Document type ${notification.documentType} not supported`);
         }
       }
     } catch (e) {

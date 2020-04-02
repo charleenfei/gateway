@@ -40,7 +40,6 @@ describe('Users controller', () => {
       permissions: [PERMISSIONS.CAN_MANAGE_DOCUMENTS],
     });
 
-
     enabledUser = await databaseService.users.insert({
       ...(new User()),
       name: 'username',
@@ -52,7 +51,6 @@ describe('Users controller', () => {
       schemas: ['some_schema'],
       permissions: [PERMISSIONS.CAN_MANAGE_DOCUMENTS],
     });
-
 
   });
 
@@ -74,7 +72,6 @@ describe('Users controller', () => {
   });
 
   describe('when in invite mode', () => {
-
 
     beforeEach(() => {
       jest.clearAllMocks();
@@ -119,7 +116,6 @@ describe('Users controller', () => {
           account: userAccount,
         });
       });
-
 
     });
 
@@ -216,7 +212,6 @@ describe('Users controller', () => {
 
     describe('register', () => {
 
-
       beforeEach(() => {
         jest.clearAllMocks();
       });
@@ -239,7 +234,6 @@ describe('Users controller', () => {
           permissions: [],
         };
 
-
         const result = await usersController.register(newUser);
         expect(result).toMatchObject({
           ...newUser,
@@ -259,6 +253,7 @@ describe('Users controller', () => {
             enabled: false,
             invited: false,
             permissions: [],
+            schemas: [],
           }),
         ).rejects.toMatchObject({
           message: {
@@ -276,6 +271,7 @@ describe('Users controller', () => {
             enabled: false,
             invited: false,
             permissions: [],
+            schemas: [],
           }),
         ).rejects.toMatchObject({
           message: {
@@ -293,6 +289,7 @@ describe('Users controller', () => {
             enabled: false,
             invited: false,
             permissions: [],
+            schemas: [],
           }),
         ).rejects.toMatchObject({
           message: {

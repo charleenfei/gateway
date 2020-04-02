@@ -44,7 +44,6 @@ describe('SchemasController', () => {
   });
   let schemaToCreate;
 
-
   const databaseSpies: any = {};
 
   beforeEach(async () => {
@@ -197,7 +196,7 @@ describe('SchemasController', () => {
 
       for (let i = 0; i < 5; i++) {
         await delay(0);
-        let newSchema = getSchemaData();
+        const newSchema = getSchemaData();
         newSchema.registries[0].label = `increment_${i}`;
         newSchema.name = `increment_${i}`;
         await schemasController.create(newSchema);
@@ -215,7 +214,7 @@ describe('SchemasController', () => {
 
       for (let i = 0; i < 5; i++) {
         await delay(0);
-        let newSchema = getSchemaData();
+        const newSchema = getSchemaData();
         newSchema.registries[0].label = `increment_${i}`;
         newSchema.name = `increment_${i}`;
         await schemasController.create(newSchema);
@@ -233,7 +232,6 @@ describe('SchemasController', () => {
       expect(databaseSpies.spyGetCursor).toHaveBeenCalledTimes(2);
     });
   });
-
 
   describe('archive', () => {
     it('should archive a schema', async () => {
@@ -296,18 +294,18 @@ describe('SchemasController', () => {
           _id: result._id,
         },
         {
-          '$set': {
-            'formFeatures': undefined,
-            'attributes': [{ 'label': 'ReferenceId', 'name': 'reference_id', 'type': 'string' }, {
-              'label': 'wingspans',
-              'type': 'string',
-              'name': 'animal_wingspan',
-            }, { 'name': 'animal_reference_id', 'label': 'reference_id', 'type': 'string' }],
-            'name': 'bestAnimals',
-            'registries': [{
-              'address': '0x87c574FB2DF0EaA2dAf5fc4a8A16dd3Ce39011B1',
-              'label': 'animal_registry',
-              'proofs': ['attributes.wingspan'],
+          $set: {
+            formFeatures: undefined,
+            attributes: [{ label: 'ReferenceId', name: 'reference_id', type: 'string' }, {
+              label: 'wingspans',
+              type: 'string',
+              name: 'animal_wingspan',
+            }, { name: 'animal_reference_id', label: 'reference_id', type: 'string' }],
+            name: 'bestAnimals',
+            registries: [{
+              address: '0x87c574FB2DF0EaA2dAf5fc4a8A16dd3Ce39011B1',
+              label: 'animal_registry',
+              proofs: ['attributes.wingspan'],
             }],
           },
         },

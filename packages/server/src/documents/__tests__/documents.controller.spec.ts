@@ -12,42 +12,42 @@ describe('DocumentsController', () => {
   let documentsModule: TestingModule;
   const documentToCreate: Document = {
     header: {
-      read_access: ['0x111'],
-      write_access: ['0x222'],
+      readAccess: ['0x111'],
+      writeAccess: ['0x222'],
     },
-    'attributes': {
-      'animal_type': {
-        'type': 'string',
-        'value': 'iguana',
+    attributes: {
+      animal_type: {
+        type: 'string',
+        value: 'iguana',
       },
-      'diet': {
-        'type': 'string',
-        'value': 'insects',
+      diet: {
+        type: 'string',
+        value: 'insects',
       },
-      'schema': {
-        'type': 'string',
-        'value': 'zoology',
+      schema: {
+        type: 'string',
+        value: 'zoology',
       },
     },
   };
 
   const documentToInsert: Document = {
     header: {
-      read_access: ['0x111'],
-      write_access: ['0x222'],
+      readAccess: ['0x111'],
+      writeAccess: ['0x222'],
     },
-    'attributes': {
-      'animal_type': {
-        'type': 'string',
-        'value': 'iguana',
+    attributes: {
+      animal_type: {
+        type: 'string',
+        value: 'iguana',
       },
-      'diet': {
-        'type': 'string',
-        'value': 'insects',
+      diet: {
+        type: 'string',
+        value: 'insects',
       },
-      'schema': {
-        'type': 'string',
-        'value': 'zoology',
+      schema: {
+        type: 'string',
+        value: 'zoology',
       },
     },
   };
@@ -69,7 +69,7 @@ describe('DocumentsController', () => {
     const databaseService = documentsModule.get<DatabaseService>(DatabaseService);
     insertedDocument = await databaseService.documents.insert({
       header: {
-        document_id: '0x39393939',
+        documentId: '0x39393939',
       },
       ...documentToInsert,
       ownerId: 'user_id',
@@ -95,7 +95,7 @@ describe('DocumentsController', () => {
         ...documentToCreate,
       };
       const result = await documentsController.create(
-        { user: { _id: 'user_id',account:'user_account' } },
+        { user: { _id: 'user_id', account: 'user_account' } },
         payload,
       );
 
@@ -141,7 +141,6 @@ describe('DocumentsController', () => {
         payload,
       );
 
-
       const result = await documentsController.getList({
         user: { _id: 'user_id' },
       });
@@ -174,20 +173,20 @@ describe('DocumentsController', () => {
       expect(databaseSpies.spyUpdate).toHaveBeenCalledWith(
         { _id: insertedDocument._id },
         {
-          '$set':
+          $set:
             {
-              'attributes':
+              attributes:
                 {
-                  'animal_type':
-                    { 'type': 'string', 'value': 'iguana' },
-                  'diet': { 'type': 'string', 'value': 'insects' },
-                  'schema': { 'type': 'string', 'value': 'zoology' },
+                  animal_type:
+                    { type: 'string', value: 'iguana' },
+                  diet: { type: 'string', value: 'insects' },
+                  schema: { type: 'string', value: 'zoology' },
                 },
 
-              'header': { 'job_id': 'some_job_id' },
+              header: { job_id: 'some_job_id' },
             },
         },
-        { 'returnUpdatedDocs': true, 'upsert': false },
+        { returnUpdatedDocs: true, upsert: false },
       );
       expect(updateResult!.attributes).toMatchObject({
         ...updatedDocument.attributes,
