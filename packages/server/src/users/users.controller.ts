@@ -31,7 +31,6 @@ export class UsersController {
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
   async login(@Body() user: User, @Request() req): Promise<User> {
-    console.log('inside login')
     return req.user;
   }
 

@@ -39,7 +39,6 @@ if (process.env.NODE_ENV === 'development') {
     }),
   })
     .then(res => {
-      console.log('RES!', res)
       res.json()
 
     })
