@@ -21,7 +21,7 @@
     "url": "git@github.com:centrifuge/gateway.git"
   },
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon --experimental-modules",
     "test": "jest --config jest.config.js",
     "build": "tsc --build",
     "clean": "rm -rf ./dist"

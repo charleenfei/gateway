@@ -19,11 +19,9 @@ const runApplication = (preloadedState) => {
   );
 };
 
-
 // in dev mode we do not have the prerendering so we autologin a user
 // and set the __ETH_NETWORK__ to kovan
 if (process.env.NODE_ENV === 'development') {
-
   // AUTO login the admin user
   fetch('/api/users/login', {
     method: 'POST',
@@ -40,7 +38,11 @@ if (process.env.NODE_ENV === 'development') {
       password: 'admin',
     }),
   })
-    .then(res => res.json())
+    .then(res => {
+      console.log('RES!', res)
+      res.json()
+
+    })
     .then(response => {
 
       window['__ETH_NETWORK__'] = 'kovan';

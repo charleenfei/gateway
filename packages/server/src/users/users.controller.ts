@@ -31,6 +31,7 @@ export class UsersController {
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
   async login(@Body() user: User, @Request() req): Promise<User> {
+    console.log('inside login')
     return req.user;
   }
 
@@ -49,7 +50,7 @@ export class UsersController {
   @Post(ROUTES.USERS.base)
   async register(@Body() user: User) {
 
-    const existingUser: User = await this.databaseService.users.findOne({
+    const existingUser = await this.databaseService.users.findOne({
       email: user.email,
     });
 
@@ -98,22 +99,22 @@ export class UsersController {
 
     return this.upsertUser({
       ...user,
-      name: user.name,
-      email: user.email,
+      name: user.name!,
+      email: user.email!,
       account: '',
       password: undefined,
       enabled: false,
       invited: true,
-      schemas: user.schemas,
-      permissions: user.permissions,
+      schemas: user.schemas!,
+      permissions: user.permissions!,
     });
   }
 
   @Put(ROUTES.USERS.base)
   @UseGuards(UserAuthGuard)
-  async update(@Body() user): Promise<User> {
+  async update(@Body() user): Promise<User | null> {
 
-    const otherUserWithEmail: User = await this.databaseService.users.findOne({
+    const otherUserWithEmail = await this.databaseService.users.findOne({
       email: user.email,
       $not: {
         _id: user._id,
@@ -136,20 +137,21 @@ export class UsersController {
     );
   }
 
+  // TODO: make this work
   private async upsertUser(user: User, id: string = '') {
     // Create centrifuge identity in case user does not have one
     if (!user.account) {
       const account = await this.centrifugeService.accounts.generateAccount(
-        config.admin.account,
+        config.admin.chainAccount,
       );
-      user.account = account.identity_id.toLowerCase();
+      user.account = account.identityId!.toLowerCase();
     }
 
     // Hash Password, and invited one should not have a password
     if (user.password) {
       user.password = await promisify(bcrypt.hash)(user.password, 10);
     }
-    const result: User = await this.databaseService.users.updateById(id, user, true);
+    const result = await this.databaseService.users.updateById(id, user, true);
     return result;
   }
 }

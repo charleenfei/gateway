@@ -22,7 +22,7 @@ export class AuthService {
    * will return the user, otherwise it returns null.
    */
   async validateUser(emailValue: string, passwordValue: string): Promise<User | null> {
-    const databaseUser: User = await this.database.users.findOne({ email: emailValue });
+    const databaseUser = await this.database.users.findOne({ email: emailValue });
     if (!databaseUser || !databaseUser.enabled)
       return null;
     const passwordMatch = await promisify(bcrypt.compare)(
