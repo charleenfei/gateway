@@ -38,12 +38,8 @@ if (process.env.NODE_ENV === 'development') {
       password: 'admin',
     }),
   })
-    .then(res => {
-      res.json()
-
-    })
+    .then(res => res.json())
     .then(response => {
-
       window['__ETH_NETWORK__'] = 'kovan';
       window['__PRELOADED_STATE__'] = {
         user: response,

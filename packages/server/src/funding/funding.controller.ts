@@ -62,7 +62,7 @@ export class FundingController {
     const signatureResponse = await this.centrifugeService.funding.signFundingAgreement(
       req.user.account,
       fundingRequest.document_id,
-      fundingResponse.data.funding.agreementId!,
+      fundingResponse.data.funding.agreementId,
     );
     await this.centrifugeService.pullForJobComplete(
       signatureResponse.header.jobId,

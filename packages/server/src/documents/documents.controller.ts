@@ -113,18 +113,18 @@ export class DocumentsController {
     @Body() document: Document,
   ) {
 
-    const documentFromDb = await this.databaseService.documents.findOne(
+    const documentFromDb: Document = await this.databaseService.documents.findOne(
       { _id: params.id },
     );
 
     if (!documentFromDb) throw new NotFoundException(`Can not find document #${params.id} in the database`);
 
     // Node does not support signed attributes
-    delete document.attributes!.funding_agreement;
+    delete document.attributes.funding_agreement;
 
     const updateResult: Document = await this.centrifugeService.documents.updateDocument(
       request.user.account,
-      documentFromDb.header.documentId!,
+      documentFromDb.header.documentId,
       {
         attributes: document.attributes,
         readAccess: document.header.readAccess,
