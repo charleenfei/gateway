@@ -14,7 +14,7 @@ const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 const config_1 = require("./config");
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '1';
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);

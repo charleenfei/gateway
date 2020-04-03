@@ -23,7 +23,7 @@ export class FundingController {
     );
 
     await this.centrifugeService.pullForJobComplete(
-      signatureResponse.header!.jobId!,
+      signatureResponse.header.jobId,
       req.user.account,
     );
 
@@ -47,7 +47,7 @@ export class FundingController {
       },
     };
 
-    if (fundingRequest.nft_address) payload.data!.nftAddress = fundingRequest.nft_address;
+    if (fundingRequest.nft_address) payload.data.nftAddress = fundingRequest.nft_address;
 
     const fundingResponse = await this.centrifugeService.funding.createFundingAgreement(
       req.user.account,
@@ -56,16 +56,16 @@ export class FundingController {
     );
 
     await this.centrifugeService.pullForJobComplete(
-      fundingResponse.header!.jobId!,
+      fundingResponse.header.jobId,
       req.user.account,
     );
     const signatureResponse = await this.centrifugeService.funding.signFundingAgreement(
       req.user.account,
       fundingRequest.document_id,
-      fundingResponse.data!.funding!.agreementId!,
+      fundingResponse.data.funding.agreementId!,
     );
     await this.centrifugeService.pullForJobComplete(
-      signatureResponse.header!.jobId!,
+      signatureResponse.header.jobId,
       req.user.account,
     );
 

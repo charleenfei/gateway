@@ -34,7 +34,7 @@ let FundingController = class FundingController {
     sign(payload, req) {
         return __awaiter(this, void 0, void 0, function* () {
             const signatureResponse = yield this.centrifugeService.funding.signFundingAgreement(req.user.account, payload.document_id, payload.agreement_id);
-            yield this.centrifugeService.pullForJobComplete(signatureResponse.header.job_id, req.user.account);
+            yield this.centrifugeService.pullForJobComplete(signatureResponse.header.jobId, req.user.account);
             return signatureResponse;
         });
     }
@@ -46,19 +46,19 @@ let FundingController = class FundingController {
                     apr: fundingRequest.apr.toString(),
                     days: fundingRequest.days.toString(),
                     fee: fundingRequest.fee.toString(),
-                    repayment_due_date: fundingRequest.repayment_due_date,
-                    repayment_amount: fundingRequest.repayment_amount.toString(),
+                    repaymentDueDate: fundingRequest.repayment_due_date,
+                    repaymentAmount: fundingRequest.repayment_amount.toString(),
                     currency: fundingRequest.currency.toString(),
-                    borrower_id: req.user.account.toString(),
-                    funder_id: fundingRequest.funder_id.toString(),
+                    borrowerId: req.user.account.toString(),
+                    funderId: fundingRequest.funder_id.toString(),
                 },
             };
             if (fundingRequest.nft_address)
-                payload.data.nft_address = fundingRequest.nft_address;
+                payload.data.nftAddress = fundingRequest.nft_address;
             const fundingResponse = yield this.centrifugeService.funding.createFundingAgreement(req.user.account, fundingRequest.document_id, payload);
-            yield this.centrifugeService.pullForJobComplete(fundingResponse.header.job_id, req.user.account);
-            const signatureResponse = yield this.centrifugeService.funding.signFundingAgreement(req.user.account, fundingRequest.document_id, fundingResponse.data.funding.agreement_id);
-            yield this.centrifugeService.pullForJobComplete(signatureResponse.header.job_id, req.user.account);
+            yield this.centrifugeService.pullForJobComplete(fundingResponse.header.jobId, req.user.account);
+            const signatureResponse = yield this.centrifugeService.funding.signFundingAgreement(req.user.account, fundingRequest.document_id, fundingResponse.data.funding.agreementId);
+            yield this.centrifugeService.pullForJobComplete(signatureResponse.header.jobId, req.user.account);
             return signatureResponse;
         });
     }

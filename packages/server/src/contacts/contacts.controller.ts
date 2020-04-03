@@ -28,8 +28,8 @@ export class ContactsController {
     }
 
     const newContact = new Contact(
-      contact.name!.trim(),
-      contact.address!.toLowerCase().trim(),
+      contact.name.trim(),
+      contact.address.toLowerCase().trim(),
       request.user._id,
     );
     return await this.databaseService.contacts.insert(newContact);

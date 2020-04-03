@@ -112,8 +112,8 @@ let UsersController = class UsersController {
     upsertUser(user, id = '') {
         return __awaiter(this, void 0, void 0, function* () {
             if (!user.account) {
-                const account = yield this.centrifugeService.accounts.generateAccount(config_1.default.admin.account);
-                user.account = account.identity_id.toLowerCase();
+                const account = yield this.centrifugeService.accounts.generateAccount(config_1.default.admin.chainAccount);
+                user.account = account.identityId.toLowerCase();
             }
             if (user.password) {
                 user.password = yield util_1.promisify(bcrypt.hash)(user.password, 10);
