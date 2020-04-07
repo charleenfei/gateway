@@ -38,7 +38,7 @@ export class DocumentsController {
       },
     };
 
-    const createResult = await this.centrifugeService.documents.createDocument(
+    const createResult = await this.centrifugeService.documents.createDocumentV2(
       request.user.account,
       {
         attributes: payload.attributes,
@@ -51,7 +51,13 @@ export class DocumentsController {
     const createAttributes = unflatten(createResult.attributes);
     createResult.attributes = createAttributes;
 
-    await this.centrifugeService.pullForJobComplete(createResult.header.jobId, request.user.account);
+    const commitResult = await this.centrifugeService.documents.commitDocumentV2(
+        request.user.account,
+        // @ts-ignore
+        createResult.header.document_id,
+    );
+    // @ts-ignore
+    await this.centrifugeService.pullForJobComplete(commitResult.header.job_id, request.user.account);
     return await this.databaseService.documents.insert({
       ...createResult,
       ownerId: request.user._id,

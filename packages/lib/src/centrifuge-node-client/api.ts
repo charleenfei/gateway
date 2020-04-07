@@ -14,8 +14,8 @@
 
 
 import * as url from "url";
-import * as portableFetch from "portable-fetch";
 import { Configuration } from "./configuration";
+const portableFetch = require("portable-fetch");
 
 const BASE_PATH = "http://localhost:8082".replace(/\/+$/, "");
 

@@ -100,7 +100,7 @@ export class UsersController {
       ...user,
       name: user.name!,
       email: user.email,
-      account: '',
+      account: undefined,
       password: undefined,
       enabled: false,
       invited: true,
@@ -141,9 +141,10 @@ export class UsersController {
     // Create centrifuge identity in case user does not have one
     if (!user.account) {
       const account = await this.centrifugeService.accounts.generateAccount(
-        config.admin.chainAccount,
+          // @ts-ignore
+          config.admin.chain,
       );
-      user.account = account.identityId.toLowerCase();
+      user.account = account.identity_id.toLowerCase();
     }
 
     // Hash Password, and invited one should not have a password
