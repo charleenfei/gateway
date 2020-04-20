@@ -36,23 +36,28 @@ export class WebhooksController {
   async receiveMessage(@Body() notification: NotificationMessage) {
     console.log('Receive Webhook', notification);
     try {
-      if (notification.eventType === EventTypes.DOCUMENT) {
+      // @ts-ignore
+      if (notification.event_type === EventTypes.DOCUMENT) {
         // Search for the user in the database
         const user = await this.databaseService.users
-          .findOne({ $or: [{ account: notification.toId!.toLowerCase() }, { account: notification.toId }] });
+            // @ts-ignore
+            .findOne({ $or: [{ account: notification.to_id!.toLowerCase() }, { account: notification.to_id }] });
         if (!user) {
           throw new Error('User is not present in database');
         }
 
-        if (notification.documentType === DocumentTypes.GENERIC_DOCUMENT) {
+        // @ts-ignore
+        if (notification.document_type === DocumentTypes.GENERIC_DOCUMENT) {
           const result = await this.centrifugeService.documents.getDocument(
             user.account,
-            notification.documentId!,
+              // @ts-ignore
+              notification.document_id!,
           );
 
           const unflattenedAttributes = unflatten(result.attributes);
           await this.databaseService.documents.update(
-            { 'header.document_id': notification.documentId, 'ownerId': user._id },
+              // @ts-ignore
+              { 'header.document_id': notification.document_id, 'ownerId': user._id },
             {
               $set: {
                 ownerId: user._id,
@@ -60,14 +65,16 @@ export class WebhooksController {
                 data: result.data,
                 attributes: unflattenedAttributes,
                 scheme: result.scheme,
-                fromId: notification.fromId,
+                // @ts-ignore
+                fromId: notification.from_id,
 
               },
             },
             { upsert: true },
           );
         } else {
-          throw new Error(`Document type ${notification.documentType} not supported`);
+          // @ts-ignore
+          throw new Error(`Document type ${notification.document_type} not supported`);
         }
       }
     } catch (e) {

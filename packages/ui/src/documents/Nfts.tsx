@@ -200,7 +200,8 @@ export const Nfts: FunctionComponent<Props> = (props) => {
       onClose={closeModal}
     >
       <MintNftForm
-        onSubmit={(data) => mintNFT(document.header!.documentId!, data)}
+        // @ts-ignore
+          onSubmit={(data) => mintNFT(document.header!.document_id!, data)}
         onDiscard={closeModal}
         registries={registries}
       />
