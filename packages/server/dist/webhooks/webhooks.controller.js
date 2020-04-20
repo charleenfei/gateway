@@ -48,28 +48,28 @@ let WebhooksController = class WebhooksController {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('Receive Webhook', notification);
             try {
-                if (notification.event_type === EventTypes.DOCUMENT) {
+                if (notification.eventType === EventTypes.DOCUMENT) {
                     const user = yield this.databaseService.users
-                        .findOne({ $or: [{ account: notification.to_id.toLowerCase() }, { account: notification.to_id }] });
+                        .findOne({ $or: [{ account: notification.toId.toLowerCase() }, { account: notification.toId }] });
                     if (!user) {
                         throw new Error('User is not present in database');
                     }
-                    if (notification.document_type === DocumentTypes.GENERIC_DOCUMENT) {
-                        const result = yield this.centrifugeService.documents.getDocument(user.account, notification.document_id);
+                    if (notification.documentType === DocumentTypes.GENERIC_DOCUMENT) {
+                        const result = yield this.centrifugeService.documents.getDocument(user.account, notification.documentId);
                         const unflattenedAttributes = custom_attributes_1.unflatten(result.attributes);
-                        yield this.databaseService.documents.update({ 'header.document_id': notification.document_id, 'ownerId': user._id }, {
+                        yield this.databaseService.documents.update({ 'header.document_id': notification.documentId, 'ownerId': user._id }, {
                             $set: {
                                 ownerId: user._id,
                                 header: result.header,
                                 data: result.data,
                                 attributes: unflattenedAttributes,
                                 scheme: result.scheme,
-                                fromId: notification.from_id,
+                                fromId: notification.fromId,
                             },
                         }, { upsert: true });
                     }
                     else {
-                        throw new Error(`Document type ${notification.document_type} not supported`);
+                        throw new Error(`Document type ${notification.documentType} not supported`);
                     }
                 }
             }

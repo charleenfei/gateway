@@ -9,10 +9,8 @@ class CentrifugeService {
     constructor() {
         this.documents = new centrifuge_node_client_1.DocumentsApi({}, config_1.default.centrifugeUrl);
         this.accounts = new centrifuge_node_client_1.AccountsApi({}, config_1.default.centrifugeUrl);
-        this.invoices = new centrifuge_node_client_1.InvoicesApi({}, config_1.default.centrifugeUrl);
         this.funding = new centrifuge_node_client_1.FundingAgreementsApi({}, config_1.default.centrifugeUrl);
         this.nft = new centrifuge_node_client_1.NFTsApi({}, config_1.default.centrifugeUrl);
-        this.nftBeta = new centrifuge_node_client_1.NFTsBetaApi({}, config_1.default.centrifugeUrl);
         this.job = new centrifuge_node_client_1.JobsApi({}, config_1.default.centrifugeUrl);
         this.transfer = new centrifuge_node_client_1.TransferDetailsApi({}, config_1.default.centrifugeUrl);
     }

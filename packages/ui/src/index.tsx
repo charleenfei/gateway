@@ -43,7 +43,6 @@ if (process.env.NODE_ENV === 'development') {
 
     })
     .then(response => {
-
       window['__ETH_NETWORK__'] = 'kovan';
       window['__PRELOADED_STATE__'] = {
         user: response,

@@ -40,13 +40,13 @@ let DocumentsController = class DocumentsController {
                     } }) });
             const createResult = yield this.centrifugeService.documents.createDocument(request.user.account, {
                 attributes: payload.attributes,
-                read_access: payload.header.read_access,
-                write_access: payload.header.write_access,
+                readAccess: payload.header.readAccess,
+                writeAccess: payload.header.writeAccess,
                 scheme: centrifuge_node_client_1.CoreapiCreateDocumentRequest.SchemeEnum.Generic,
             });
             const createAttributes = custom_attributes_1.unflatten(createResult.attributes);
             createResult.attributes = createAttributes;
-            yield this.centrifugeService.pullForJobComplete(createResult.header.job_id, request.user.account);
+            yield this.centrifugeService.pullForJobComplete(createResult.header.jobId, request.user.account);
             return yield this.databaseService.documents.insert(Object.assign({}, createResult, { ownerId: request.user._id }));
         });
     }
@@ -66,7 +66,7 @@ let DocumentsController = class DocumentsController {
             });
             if (!document)
                 throw new common_1.NotFoundException('Document not found');
-            const docFromNode = yield this.centrifugeService.documents.getDocument(request.user.account, document.header.document_id);
+            const docFromNode = yield this.centrifugeService.documents.getDocument(request.user.account, document.header.documentId);
             return Object.assign({ _id: document._id }, docFromNode, { attributes: Object.assign({}, custom_attributes_1.unflatten(docFromNode.attributes)) });
         });
     }
@@ -76,13 +76,13 @@ let DocumentsController = class DocumentsController {
             if (!documentFromDb)
                 throw new common_1.NotFoundException(`Can not find document #${params.id} in the database`);
             delete document.attributes.funding_agreement;
-            const updateResult = yield this.centrifugeService.documents.updateDocument(request.user.account, documentFromDb.header.document_id, {
+            const updateResult = yield this.centrifugeService.documents.updateDocument(request.user.account, documentFromDb.header.documentId, {
                 attributes: document.attributes,
-                read_access: document.header.read_access,
-                write_access: document.header.write_access,
+                readAccess: document.header.readAccess,
+                writeAccess: document.header.writeAccess,
                 scheme: centrifuge_node_client_1.CoreapiCreateDocumentRequest.SchemeEnum.Generic,
             });
-            yield this.centrifugeService.pullForJobComplete(updateResult.header.job_id, request.user.account);
+            yield this.centrifugeService.pullForJobComplete(updateResult.header.jobId, request.user.account);
             const unflattenAttr = custom_attributes_1.unflatten(updateResult.attributes);
             return yield this.databaseService.documents.updateById(params.id, {
                 $set: {

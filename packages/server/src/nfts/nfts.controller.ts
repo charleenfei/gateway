@@ -40,7 +40,7 @@ export class NftsController {
       payload,
     );
 
-    await this.centrifugeService.pullForJobComplete(mintingResult.header!.jobId!, request.user.account);
+    await this.centrifugeService.pullForJobComplete(mintingResult.header.jobId, request.user.account);
     return mintingResult;
   }
 
@@ -66,7 +66,7 @@ export class NftsController {
       },
     );
 
-    await this.centrifugeService.pullForJobComplete(transferResult.header!.jobId!, request.user.account);
+    await this.centrifugeService.pullForJobComplete(transferResult.header.jobId, request.user.account);
     return transferResult;
   }
 }

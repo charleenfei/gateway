@@ -49,7 +49,7 @@ export class UsersController {
   @Post(ROUTES.USERS.base)
   async register(@Body() user: User) {
 
-    const existingUser = await this.databaseService.users.findOne({
+    const existingUser: User = await this.databaseService.users.findOne({
       email: user.email,
     });
 
@@ -99,21 +99,28 @@ export class UsersController {
     return this.upsertUser({
       ...user,
       name: user.name!,
-      email: user.email!,
+      email: user.email,
       account: '',
+      chain: {
+        centrifuge_chain_account: {
+          id: '',
+          secret: '',
+          ss_58_address: '',
+        },
+      },
       password: undefined,
       enabled: false,
       invited: true,
-      schemas: user.schemas!,
-      permissions: user.permissions!,
+      schemas: user.schemas,
+      permissions: user.permissions,
     });
   }
 
   @Put(ROUTES.USERS.base)
   @UseGuards(UserAuthGuard)
-  async update(@Body() user): Promise<User | null> {
+  async update(@Body() user): Promise<User> {
 
-    const otherUserWithEmail = await this.databaseService.users.findOne({
+    const otherUserWithEmail: User = await this.databaseService.users.findOne({
       email: user.email,
       $not: {
         _id: user._id,
@@ -141,16 +148,17 @@ export class UsersController {
     // Create centrifuge identity in case user does not have one
     if (!user.account) {
       const account = await this.centrifugeService.accounts.generateAccount(
-        config.admin.chainAccount,
+          // @ts-ignore
+          config.admin.chain,
       );
-      user.account = account.identityId!.toLowerCase();
+      user.account = account.identityId.toLowerCase();
     }
 
     // Hash Password, and invited one should not have a password
     if (user.password) {
       user.password = await promisify(bcrypt.hash)(user.password, 10);
     }
-    const result = await this.databaseService.users.updateById(id, user, true);
+    const result: User = await this.databaseService.users.updateById(id, user, true);
     return result;
   }
 }

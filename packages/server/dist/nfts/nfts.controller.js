@@ -34,12 +34,12 @@ let NftsController = class NftsController {
     mintNFT(request, body) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
-                document_id: body.document_id,
-                proof_fields: body.proof_fields,
-                deposit_address: body.deposit_address,
+                documentId: body.document_id,
+                proofFields: body.proof_fields,
+                depositAddress: body.deposit_address,
             };
-            const mintingResult = yield this.centrifugeService.nftBeta.mintNft(request.user.account, body.registry_address, payload);
-            yield this.centrifugeService.pullForJobComplete(mintingResult.header.job_id, request.user.account);
+            const mintingResult = yield this.centrifugeService.nft.mintNft(request.user.account, body.registry_address, payload);
+            yield this.centrifugeService.pullForJobComplete(mintingResult.header.jobId, request.user.account);
             return mintingResult;
         });
     }
@@ -48,7 +48,7 @@ let NftsController = class NftsController {
             const transferResult = yield this.centrifugeService.nft.transferNft(request.user.account, body.registry, body.token_id, {
                 to: body.to,
             });
-            yield this.centrifugeService.pullForJobComplete(transferResult.header.job_id, request.user.account);
+            yield this.centrifugeService.pullForJobComplete(transferResult.header.jobId, request.user.account);
             return transferResult;
         });
     }
