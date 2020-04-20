@@ -23,6 +23,7 @@ const initializeDatabase = (inMemoryOnly) => __awaiter(this, void 0, void 0, fun
         invited: false,
         schemas: [],
         account: config_1.default.admin.account,
+        chain: config_1.default.admin.chain,
         permissions: config_1.default.admin.permissions,
     };
     const userExists = yield usersRepository.findOne({
@@ -49,6 +50,7 @@ exports.databaseServiceProvider = {
         if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'functional') {
             testingMode = true;
         }
+        testingMode = false;
         if (!initializeDatabasePromise || testingMode) {
             initializeDatabasePromise = initializeDatabase(testingMode);
         }
