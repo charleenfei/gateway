@@ -101,6 +101,13 @@ export class UsersController {
       name: user.name!,
       email: user.email,
       account: '',
+      chain: {
+        centrifuge_chain_account: {
+          id: '',
+          secret: '',
+          ss_58_address: '',
+        },
+      },
       password: undefined,
       enabled: false,
       invited: true,
@@ -141,7 +148,8 @@ export class UsersController {
     // Create centrifuge identity in case user does not have one
     if (!user.account) {
       const account = await this.centrifugeService.accounts.generateAccount(
-        config.admin.chainAccount,
+          // @ts-ignore
+          config.admin.chain,
       );
       user.account = account.identityId.toLowerCase();
     }

@@ -16,11 +16,11 @@ const config = {
     password: env.CENTRIFUGE_ADMIN_PASSWORD || 'admin',
     // Centrifuge Identity Address
     account: env.CENTRIFUGE_ADMIN_ACCOUNT || '0xd73C302A440dbA95d3f215455523365dE08eC677',
-    chain: env.CENTRIFUGE_CHAIN_ACCOUNT || {
+    chain: {
       centrifuge_chain_account : {
-        id: '5GsguKZEenCwq9FTzvecQS32YSkJv6ySjApoDRQ4H8D8HQqx',
-        secret: '0xd4c641645b26aae66aa19e942c8a386eb7f1e72b1d711bc057b3597c91004e45',
-        ss_58_address: '0xdbacfff9b7eddd346d182fe71a5ed6649ce14bacad5bc6f0b7ba13618793b636',
+        id: env.CENTRIFUGE_CHAIN_ID || '5GsguKZEenCwq9FTzvecQS32YSkJv6ySjApoDRQ4H8D8HQqx',
+        secret: env.CENTRIFUGE_CHAIN_SECRET || '0xd4c641645b26aae66aa19e942c8a386eb7f1e72b1d711bc057b3597c91004e45',
+        ss_58_address: env.CENTRIFUGE_CHAIN_ADDRESS || '0xdbacfff9b7eddd346d182fe71a5ed6649ce14bacad5bc6f0b7ba13618793b636',
       },
     },
     permissions: [PERMISSIONS.CAN_MANAGE_USERS, PERMISSIONS.CAN_MANAGE_SCHEMAS, PERMISSIONS.CAN_VIEW_DOCUMENTS, PERMISSIONS.CAN_MANAGE_DOCUMENTS],

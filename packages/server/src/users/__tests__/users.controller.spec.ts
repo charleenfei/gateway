@@ -34,6 +34,13 @@ describe('Users controller', () => {
       name: 'username',
       email: 'test1',
       account: '0x333',
+      chain: {
+        centrifuge_chain_account: {
+          id: 'test',
+          secret: 'test',
+          ss_58_address: 'test',
+        },
+      },
       password: 'password',
       enabled: false,
       invited: true,
@@ -46,6 +53,13 @@ describe('Users controller', () => {
       name: 'username',
       email: 'test2',
       account: '0x333',
+      chain: {
+        centrifuge_chain_account: {
+          id: 'test',
+          secret: 'test',
+          ss_58_address: 'test',
+        },
+      },
       password: 'password',
       enabled: true,
       invited: false,
@@ -71,7 +85,7 @@ describe('Users controller', () => {
       expect(response.redirect).toHaveBeenCalledWith('/');
     });
   });
-  //
+
   // describe('when in invite mode', () => {
   //
   //   beforeEach(() => {

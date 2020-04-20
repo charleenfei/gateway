@@ -26,6 +26,7 @@ const initializeDatabase = async (inMemoryOnly: boolean) => {
     invited: false,
     schemas: [],
     account: config.admin.account,
+    chain: config.admin.chain,
     permissions: config.admin.permissions,
   };
 
