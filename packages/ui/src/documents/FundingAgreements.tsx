@@ -74,7 +74,8 @@ export const FundingAgreements: FunctionComponent<Props> = (props) => {
     try {
       const payload = {
         ...data,
-        document_id: document.header!.documentId,
+        // @ts-ignore
+        document_id: document.header!.document_id,
       } as FundingRequest;
       onAsyncComplete((await httpClient.funding.create(payload)).data);
 
@@ -90,7 +91,8 @@ export const FundingAgreements: FunctionComponent<Props> = (props) => {
     try {
       const payload = {
         agreement_id: funding.agreement_id!,
-        document_id: document.header!.documentId!,
+        // @ts-ignore
+        document_id: document.header!.document_id!,
       };
       onAsyncComplete((await httpClient.funding.sign(payload)).data);
 

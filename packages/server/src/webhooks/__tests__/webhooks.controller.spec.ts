@@ -44,11 +44,12 @@ describe('WebhooksController', () => {
       );
 
       const result = await webhooksController.receiveMessage({
-        eventType: EventTypes.DOCUMENT,
-        documentType: DocumentTypes.GENERIC_DOCUMENT,
-        documentId,
-        toId: user.account,
-        fromId: '0xRandomId',
+        // @ts-ignore
+        event_type: EventTypes.DOCUMENT,
+        document_type: DocumentTypes.GENERIC_DOCUMENT,
+        document_id: documentId,
+        to_id: user.account,
+        from_id: '0xRandomId',
       });
 
       expect(result).toEqual('OK');

@@ -100,14 +100,7 @@ export class UsersController {
       ...user,
       name: user.name!,
       email: user.email,
-      account: '',
-      chain: {
-        centrifuge_chain_account: {
-          id: '',
-          secret: '',
-          ss_58_address: '',
-        },
-      },
+      account: undefined,
       password: undefined,
       enabled: false,
       invited: true,
@@ -143,7 +136,6 @@ export class UsersController {
     );
   }
 
-  // TODO: make this work
   private async upsertUser(user: User, id: string = '') {
     // Create centrifuge identity in case user does not have one
     if (!user.account) {
@@ -151,7 +143,7 @@ export class UsersController {
           // @ts-ignore
           config.admin.chain,
       );
-      user.account = account.identityId.toLowerCase();
+      user.account = account.identity_id.toLowerCase();
     }
 
     // Hash Password, and invited one should not have a password
