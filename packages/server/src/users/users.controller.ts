@@ -101,6 +101,7 @@ export class UsersController {
       name: user.name!,
       email: user.email,
       account: undefined,
+      chain: undefined,
       password: undefined,
       enabled: false,
       invited: true,
