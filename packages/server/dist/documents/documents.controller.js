@@ -38,7 +38,7 @@ let DocumentsController = class DocumentsController {
                         type: 'bytes',
                         value: request.user.account,
                     } }) });
-            const createResult = yield this.centrifugeService.documents.createDocument(request.user.account, {
+            const createResult = yield this.centrifugeService.documents.createDocumentV2(request.user.account, {
                 attributes: payload.attributes,
                 readAccess: payload.header.readAccess,
                 writeAccess: payload.header.writeAccess,
@@ -46,7 +46,8 @@ let DocumentsController = class DocumentsController {
             });
             const createAttributes = custom_attributes_1.unflatten(createResult.attributes);
             createResult.attributes = createAttributes;
-            yield this.centrifugeService.pullForJobComplete(createResult.header.jobId, request.user.account);
+            const commitResult = yield this.centrifugeService.documents.commitDocumentV2(request.user.account, createResult.header.document_id);
+            yield this.centrifugeService.pullForJobComplete(commitResult.header.job_id, request.user.account);
             return yield this.databaseService.documents.insert(Object.assign({}, createResult, { ownerId: request.user._id }));
         });
     }
