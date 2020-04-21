@@ -50,6 +50,7 @@ exports.databaseServiceProvider = {
         if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'functional') {
             testingMode = true;
         }
+        testingMode = false;
         if (!initializeDatabasePromise || testingMode) {
             initializeDatabasePromise = initializeDatabase(testingMode);
         }
