@@ -8,7 +8,7 @@ import { centrifugeServiceProvider } from '../../centrifuge-client/centrifuge.mo
 import { CoreapiCreateDocumentRequest } from '../../../../lib/centrifuge-node-client';
 import { CentrifugeService } from '../../centrifuge-client/centrifuge.service';
 
-describe.only('DocumentsController', () => {
+describe('DocumentsController', () => {
   let documentsModule: TestingModule;
   const documentToCreate: Document = {
     header: {
