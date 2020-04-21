@@ -8,7 +8,7 @@ import { centrifugeServiceProvider } from '../../centrifuge-client/centrifuge.mo
 import { CoreapiCreateDocumentRequest } from '../../../../lib/centrifuge-node-client';
 import { CentrifugeService } from '../../centrifuge-client/centrifuge.service';
 
-describe('DocumentsController', () => {
+describe.only('DocumentsController', () => {
   let documentsModule: TestingModule;
   const documentToCreate: Document = {
     header: {
@@ -85,69 +85,69 @@ describe('DocumentsController', () => {
     centApiSpies.spyGetDocument = jest.spyOn(centrifugeService.documents, 'getDocument');
   });
 
-  // describe('create', () => {
-  //   it('should return the created document', async () => {
-  //     const documentsController = documentsModule.get<DocumentsController>(
-  //       DocumentsController,
-  //     );
-  //
-  //     const payload: CoreapiCreateDocumentRequest = {
-  //       ...documentToCreate,
-  //     };
-  //     const result = await documentsController.create(
-  //       { user: { _id: 'user_id', account: 'user_account' } },
-  //       payload,
-  //     );
-  //
-  //     expect(result).toMatchObject({
-  //       ...documentToCreate,
-  //       header: {
-  //         job_id: 'some_job_id',
-  //       },
-  //       attributes: {
-  //         ...documentToCreate.attributes,
-  //         _createdBy: {
-  //           type: 'bytes',
-  //           value: 'user_account',
-  //         },
-  //       },
-  //       ownerId: 'user_id',
-  //     });
-  //
-  //     expect(databaseSpies.spyInsert).toHaveBeenCalledTimes(1);
-  //   });
-  // });
-  //
-  // describe('get documents list', () => {
-  //
-  //   it('should get the list of documents from the database', async () => {
-  //     const documentsController = documentsModule.get<DocumentsController>(
-  //       DocumentsController,
-  //     );
-  //
-  //     const payload: CoreapiCreateDocumentRequest = {
-  //       ...documentToCreate,
-  //     };
-  //
-  //     await documentsController.create(
-  //       { user: { _id: 'user_id' } },
-  //       payload,
-  //     );
-  //
-  //     payload.attributes = {};
-  //
-  //     await documentsController.create(
-  //       { user: { _id: 'user_id' } },
-  //       payload,
-  //     );
-  //
-  //     const result = await documentsController.getList({
-  //       user: { _id: 'user_id' },
-  //     });
-  //     expect(result.length).toEqual(3);
-  //     expect(databaseSpies.spyGetAll).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+  describe('create', () => {
+    it('should return the created document', async () => {
+      const documentsController = documentsModule.get<DocumentsController>(
+        DocumentsController,
+      );
+
+      const payload: CoreapiCreateDocumentRequest = {
+        ...documentToCreate,
+      };
+      const result = await documentsController.create(
+        { user: { _id: 'user_id', account: 'user_account' } },
+        payload,
+      );
+
+      expect(result).toMatchObject({
+        ...documentToCreate,
+        header: {
+          job_id: 'some_job_id',
+        },
+        attributes: {
+          ...documentToCreate.attributes,
+          _createdBy: {
+            type: 'bytes',
+            value: 'user_account',
+          },
+        },
+        ownerId: 'user_id',
+      });
+
+      expect(databaseSpies.spyInsert).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('get documents list', () => {
+
+    it('should get the list of documents from the database', async () => {
+      const documentsController = documentsModule.get<DocumentsController>(
+        DocumentsController,
+      );
+
+      const payload: CoreapiCreateDocumentRequest = {
+        ...documentToCreate,
+      };
+
+      await documentsController.create(
+        { user: { _id: 'user_id' } },
+        payload,
+      );
+
+      payload.attributes = {};
+
+      await documentsController.create(
+        { user: { _id: 'user_id' } },
+        payload,
+      );
+
+      const result = await documentsController.getList({
+        user: { _id: 'user_id' },
+      });
+      expect(result.length).toEqual(3);
+      expect(databaseSpies.spyGetAll).toHaveBeenCalledTimes(1);
+    });
+  });
 
   describe('update', function() {
     it('should update the specified document', async function() {
