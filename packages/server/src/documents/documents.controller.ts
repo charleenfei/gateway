@@ -50,7 +50,8 @@ export class DocumentsController {
 
     const createAttributes = unflatten(createResult.attributes);
     createResult.attributes = createAttributes;
-
+    // @ts-ignore
+    await this.centrifugeService.pullForJobComplete(createResult.header.job_id, request.user.account);
     const commitResult = await this.centrifugeService.documents.commitDocumentV2(
         request.user.account,
         // @ts-ignore
