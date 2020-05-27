@@ -191,6 +191,9 @@ export class DocumentForm extends React.Component<Props, State> {
       document.header.writeAccess = [];
     }
 
+    // If a set of collaborators is set on schema, use it as default
+    const collaborators = (selectedSchema && selectedSchema.collaborators) || [];
+
 
     return (
       <ViewModeFormContainer isViewMode={mode === 'view'} pad={{ bottom: 'xlarge' }}>
@@ -243,6 +246,7 @@ export class DocumentForm extends React.Component<Props, State> {
                       </Section>
                       <Collaborators
                         contacts={contacts}
+                        collaborators={collaborators}
                         viewMode={isViewMode}/>
                       {children}
 

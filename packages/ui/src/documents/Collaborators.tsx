@@ -21,6 +21,7 @@ import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHe
 
 interface OuterProps {
   contacts: Contact[],
+  collaborators: Collaborator[],
   viewMode: boolean,
 }
 
@@ -96,13 +97,24 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
   const {
     viewMode,
     contacts,
+    collaborators,
     formik: {
       values,
       setFieldValue,
     },
   } = props;
 
-  let collaborators = getDocumentCollaborators(values, contacts);
+  // Merge schema collaborators with available contacts
+  let contactsInstance = getDocumentCollaborators(values, contacts.concat(collaborators));
+
+  // Schema provided collaborators cannot replace used contacts
+  // The unique criteria is the address
+  if (collaborators) {
+    contactsInstance = contactsInstance.concat(collaborators.filter(
+      collaborator => ! contactsInstance.find(
+        contact => collaborator.address.toLowerCase() === contact.address.toLowerCase())
+    ));
+  }
 
   const openCollaboratorFormInAddMode = () => {
     setState({
@@ -143,7 +155,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
   };
 
   const removeCollaborator = (collaborator: Collaborator) => {
-    updateCollaborators(collaborators.filter(c => {
+    updateCollaborators(contactsInstance.filter(c => {
       return c.address.toLowerCase() !== collaborator.address.toLowerCase();
     }) as Collaborator[]);
   };
@@ -154,7 +166,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
       collaboratorModelOpened: false,
     });
     updateCollaborators([
-      ...collaborators.filter(c => {
+      ...contactsInstance.filter(c => {
         return c.address.toLowerCase() !== collaborator.address.toLowerCase();
       }),
       collaborator,
@@ -183,7 +195,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
       <DataTableWithDynamicHeight
         size={'360px'}
         sortable={true}
-        data={collaborators}
+        data={contactsInstance}
         primaryKey={'address'}
         columns={[
           {
@@ -210,6 +222,13 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
           {
             property: 'access',
             header: 'Access',
+          },
+          {
+            property: 'type',
+            header: 'Type',
+            render: (datum: Collaborator) => {
+              return <Text>{datum.type || 'Contact'}</Text>;
+            },
           },
           {
             property: '_id',
@@ -245,7 +264,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
           },
         ]}
       />
-      {!collaborators.length &&
+      {!contactsInstance.length &&
       <Paragraph color={'dark-2'}>There are no collaborators agreements yet.</Paragraph>}
     </Section>);
   };
