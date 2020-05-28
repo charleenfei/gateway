@@ -1,10 +1,5 @@
 import { mount, shallow } from 'enzyme';
 import React from 'react';
-import { Spinner } from '@centrifuge/axis-spinner';
-import { Modal } from '@centrifuge/axis-modal';
-import { NumberInput } from '@centrifuge/axis-number-input';
-import { DateInput } from '@centrifuge/axis-date-input';
-import { SearchSelect } from '@centrifuge/axis-search-select';
 import { Paragraph, TextArea } from 'grommet';
 import { withAxis } from '../../test-utilities/test-providers';
 import SchemaForm from '../SchemaForm';
