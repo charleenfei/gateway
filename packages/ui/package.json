@@ -36,7 +36,6 @@
     "grommet-icons": "^4.2.0",
     "lodash": "^4.17.14",
     "react": "^16.9.0",
-    "react-async-hook": "^3.6.1",
     "react-dom": "^16.9.0",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
