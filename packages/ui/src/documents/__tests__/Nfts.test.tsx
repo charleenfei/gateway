@@ -1,13 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { BrowserRouter } from 'react-router-dom';
-import { SearchSelect } from '@centrifuge/axis-search-select';
 import { Nfts } from '../Nfts';
 import { Button, DataTable } from 'grommet';
 import MintNftForm from '../MintNftForm';
 import { defaultContacts, defaultUser } from '../../test-utilities/default-data';
 import { withAllProvidersAndContexts } from '../../test-utilities/test-providers';
-import {act} from "react-dom/test-utils";
 
 jest.mock('../../http-client');
 const httpClient = require('../../http-client').httpClient;
