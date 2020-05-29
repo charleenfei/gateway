@@ -15,7 +15,7 @@ describe('Nfts', () => {
     {
       label: 'First Registry',
       address: '0xFirstRegistry',
-      asset_manager_address: '0xFirstRegistry',
+      asset_manager_address: '0x3bDa52c72Af90794168A37b0DB8Ee784E6507906',
       proofs: [
         'firstRegistryFirstProof',
         'firstRegistrySecondProof',
@@ -23,8 +23,8 @@ describe('Nfts', () => {
     },
     {
       label: 'Second Registry',
-      address: '0xSecondRegistry',
-      asset_manager_address: '0xSecondRegistry',
+      address: '0x3bDa52c72Af90794168A37b0DB8Ee784E6507906',
+      asset_manager_address: '0x3bDa52c72Af90794168A37b0DB8Ee784E6507906',
       proofs: [
         'secondRegistryFirstProof',
         'secondRegistrySecondProof',
@@ -38,12 +38,12 @@ describe('Nfts', () => {
       nfts: [
         {
           owner: 'Owner of first nft',
-          registry: '0xFirstRegistry',
+          registry: '0x3bDa52c72Af90794168A37b0DB8Ee784E6507906',
           token_id: '0x8416c0d06fae1a25dd11e6f0991f58816e0c2de1c755aa5a9ceee389f23ded3c',
         },
         {
           owner: 'Owner of second nft',
-          registry: '0xSecondRegistry',
+          registry: '0x3bDa52c72Af90794168A37b0DB8Ee784E6507906',
           token_id: '0xSecondTokenId',
         },
       ],
