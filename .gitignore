@@ -15,6 +15,7 @@ pids
 lib-cov
 packages/ui/src/react-app-env.d.ts
 packages/server/src/react-app-env.d.ts
+packages/lib/src/react-app-env.d.ts
 
 # Coverage directory used by tools like istanbul
 coverage
