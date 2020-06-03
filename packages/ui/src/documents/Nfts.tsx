@@ -211,6 +211,7 @@ export const Nfts: FunctionComponent<Props> = (props) => {
         onSubmit={(data) => mintNFT(document.header!.document_id!, data)}
         onDiscard={closeModal}
         registries={registries}
+        user={user}
       />
     </Modal>
 
