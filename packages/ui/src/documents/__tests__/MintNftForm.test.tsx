@@ -20,6 +20,11 @@ describe('Mint NFT Form', () => {
   const onDiscard = jest.fn(() => {
   });
 
+  beforeEach(() => {
+    onSubmit.mockClear();
+    onDiscard.mockClear();
+  });
+
 
   it('Should render the MintNftForm', async () => {
 
@@ -88,8 +93,6 @@ describe('Mint NFT Form', () => {
       ),
     );
 
-    onSubmit.mockClear();
-
     const registryField = component.find({ name: 'registry' }).find(SearchSelect);
     registryField.prop('onChange')(defaultSchemas[0].registries[0]);
 
@@ -97,7 +100,6 @@ describe('Mint NFT Form', () => {
     submit.simulate('click');
     // Form validator are async so we need wait a little
     await new Promise(r => setTimeout(r, 0));
-    expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onSubmit).toHaveBeenCalledWith({
       registry: defaultSchemas[0].registries[0],
       deposit_address: defaultUser.account,
