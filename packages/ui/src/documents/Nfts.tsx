@@ -123,6 +123,37 @@ export const Nfts: FunctionComponent<Props> = (props) => {
     });
   };
 
+  const assembleDeepLink = (tokenId: string, registry: string, tinlakePool: string,) => {
+    const address = `${tinlakePool}/loans/issue?tokenId=${tokenId}&registry=${registry}`
+
+    return <Anchor
+        label={'Open Loan'}
+        href={address}
+    />
+  };
+
+  const renderNftActions = (datum: any, registries: Registry[]) => {
+    let actions;
+    if (canTransferNft(user, datum)) {
+       actions = <Box direction="row" gap="small">
+        <Anchor
+            label={'Transfer'}
+            onClick={() => openTransferModal(datum)}
+        />
+      </Box>
+    }
+    if (registries[0].tinlakePool) {
+      actions = <Box direction="row" gap="small">
+        <Anchor
+            label={'Transfer'}
+            onClick={() => openTransferModal(datum)}
+        />
+        { assembleDeepLink(hexToInt(datum.token_id), datum.registry, registries[0].tinlakePool) }
+      </Box>
+    }
+    return actions
+  };
+
   const mintActions = !viewMode ? [
     <Button key="mint-nft" onClick={openMintModal} icon={<Money/>} plain label={'Mint NFT'}/>,
   ] : [];
@@ -151,7 +182,6 @@ export const Nfts: FunctionComponent<Props> = (props) => {
               }}
               value={hexToInt(datum.token_id)}/>,
           },
-
           {
             property: 'registry',
             header: 'Registry',
@@ -181,13 +211,7 @@ export const Nfts: FunctionComponent<Props> = (props) => {
             property: '_id',
             header: 'Actions',
             sortable: false,
-            render: datum => {
-              return canTransferNft(user, datum) ? <Box direction="row" gap="small">
-                <Anchor
-                  label={'Transfer'}
-                  onClick={() => openTransferModal(datum)}
-                />
-              </Box> : [];
+            render: datum => {return renderNftActions(datum, registries)
             },
           },
         ]}
