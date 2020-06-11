@@ -45,7 +45,7 @@ describe('Mint NFT Form', () => {
     expect(options).toBe(defaultSchemas[0].registries);
   });
 
-  it('Should display deposit_address field and prepopulate the form with the registry and user address', async () => {
+  it('Should display deposit_address field and prepopulate the form with the registry', async () => {
 
     const component = mount(
       withAxis(
@@ -59,7 +59,7 @@ describe('Mint NFT Form', () => {
     );
     const depositAddress = component.find({ name: 'deposit_address' }).find(TextInput);
     expect(depositAddress.length).toBe(1);
-    expect(depositAddress.prop('value')).toEqual(defaultUser.account)
+    expect(depositAddress.prop('value')).toEqual('')
   });
 
   it('Should not submit the form because of validation', async () => {
@@ -80,7 +80,7 @@ describe('Mint NFT Form', () => {
     expect(onSubmit).toHaveBeenCalledTimes(0);
   });
 
-  it('Should  submit the form', async () => {
+  it('Should submit the form', async () => {
 
     const component = mount(
       withAxis(
@@ -102,7 +102,7 @@ describe('Mint NFT Form', () => {
     await new Promise(r => setTimeout(r, 0));
     expect(onSubmit).toHaveBeenCalledWith({
       registry: defaultSchemas[0].registries[0],
-      deposit_address: defaultUser.account,
+      deposit_address:'',
     });
   });
 
