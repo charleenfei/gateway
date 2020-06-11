@@ -74,7 +74,7 @@ export const Nfts: FunctionComponent<Props> = (props) => {
       onAsyncComplete((await httpClient.nfts.mint(
         {
           document_id: id,
-          deposit_address: user!.account,
+          deposit_address: data.deposit_address,
           proof_fields: data.registry!.proofs,
           registry_address: data.registry!.address,
           asset_manager_address: data.registry!.asset_manager_address
