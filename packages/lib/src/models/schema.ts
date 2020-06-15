@@ -46,7 +46,6 @@ const generateAttributeError = (identifier, message) => {
   return new Error(`Error on attributes for '${identifier}': ${message}`);
 };
 
-
 const generateRegistryError = (identifier, message) => {
   return new Error(`Error with ${identifier}: ${message}`);
 };
@@ -62,7 +61,6 @@ const generateDiffError = (identifier, message) => {
 const propertyUnset = (obj: object, prop: string) => {
   return !obj[prop] || !obj[prop].toString().trim();
 };
-
 
 export enum DiffErrors {
   NAME_CHANGE_FORBIDEN = 'Changing schema name is not allowed. Create a new one instead',

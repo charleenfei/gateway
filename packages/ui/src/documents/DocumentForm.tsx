@@ -12,7 +12,6 @@ import Attributes from './Attributes';
 import { ViewModeFormContainer } from '../components/ViewModeFormContainer';
 import Collaborators from './Collaborators';
 
-
 // TODO use function components here
 type Props = {
   onSubmit?: (document: Document) => void;
@@ -191,7 +190,6 @@ export class DocumentForm extends React.Component<Props, State> {
 
     // If a set of collaborators is set on schema, use it as default
     const collaborators = (selectedSchema && selectedSchema.collaborators) || [];
-
 
     return (
       <ViewModeFormContainer isViewMode={mode === 'view'} pad={{ bottom: 'xlarge' }}>
