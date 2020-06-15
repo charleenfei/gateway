@@ -8,12 +8,6 @@ import { TextInput } from 'grommet';
 
 describe('Mint NFT Form', () => {
 
-  const nft = {
-    token_id: '12345',
-    owner: '0x414C30A8824D4Ed8479e0d58F35A629C671a8db1',
-    registry: '0x73BBD27Add39096FA133E3DF998B9EB2Ef18cC0d',
-  };
-
   const onSubmit = jest.fn(() => {
   });
 
@@ -34,7 +28,6 @@ describe('Mint NFT Form', () => {
           onSubmit={onSubmit}
           onDiscard={onDiscard}
           registries={defaultSchemas[0].registries}
-          user={defaultUser}
         />,
       ),
     );
@@ -53,7 +46,6 @@ describe('Mint NFT Form', () => {
           onSubmit={onSubmit}
           onDiscard={onDiscard}
           registries={defaultSchemas[0].registries}
-          user={defaultUser}
         />,
       ),
     );
@@ -70,7 +62,6 @@ describe('Mint NFT Form', () => {
           onSubmit={onSubmit}
           onDiscard={onDiscard}
           registries={defaultSchemas[0].registries}
-          user={defaultUser}
         />,
       ),
     );
@@ -88,7 +79,6 @@ describe('Mint NFT Form', () => {
           onSubmit={onSubmit}
           onDiscard={onDiscard}
           registries={defaultSchemas[0].registries}
-          user={defaultUser}
         />,
       ),
     );
@@ -115,7 +105,6 @@ describe('Mint NFT Form', () => {
           onSubmit={onSubmit}
           onDiscard={onDiscard}
           registries={defaultSchemas[0].registries}
-          user={defaultUser}
         />,
       ),
     );
