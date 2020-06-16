@@ -76,6 +76,8 @@ export class DocumentForm extends React.Component<Props, State> {
   }
 
   onSubmit = (values) => {
+
+    console.log('values in submit', values)
     const { selectedSchema } = this.state;
 
     const payload = {
@@ -89,6 +91,8 @@ export class DocumentForm extends React.Component<Props, State> {
         },
       },
     };
+
+    console.log('payload in submit', payload)
 
     this.props.onSubmit && this.props.onSubmit(payload);
   };
@@ -175,19 +179,6 @@ export class DocumentForm extends React.Component<Props, State> {
         ...document.attributes,
       };
     }
-    if (!document.header) {
-      document.header = {};
-    }
-
-    // TODO we should move this add them somewhere else?
-    if (!document.header.readAccess || !Array.isArray(document.header.readAccess)) {
-      document.header.readAccess = [];
-    }
-
-    if (!document.header.writeAccess || !Array.isArray(document.header.writeAccess)) {
-      document.header.writeAccess = [];
-    }
-
     // If a set of collaborators is set on schema, use it as default
     const collaborators = (selectedSchema && selectedSchema.collaborators) || [];
 
@@ -251,7 +242,6 @@ export class DocumentForm extends React.Component<Props, State> {
                         {(selectedSchema.formFeatures && selectedSchema.formFeatures.comments) &&
                         <Comments columnGap={columnGap} isViewMode={isViewMode}/>}
                       </>}
-
                     </Box>
                   </form>
                 )

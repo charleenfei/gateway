@@ -42,8 +42,10 @@ export class DocumentsController {
       request.user.account,
       {
         attributes: payload.attributes,
-        readAccess: payload.header.readAccess,
-        writeAccess: payload.header.writeAccess,
+        // @ts-ignore
+        read_access: payload.header.read_access,
+        // @ts-ignore
+        write_access: payload.header.write_access,
         scheme: CoreapiCreateDocumentRequest.SchemeEnum.Generic,
       },
     );

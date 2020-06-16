@@ -68,7 +68,6 @@ export const CreateDocument: FunctionComponent<Props> = (props) => {
         contacts,
         schemas,
       });
-
     } catch (e) {
       displayPageError(e);
     }
@@ -95,7 +94,6 @@ export const CreateDocument: FunctionComponent<Props> = (props) => {
         message: (e as AxiosError)!.response!.data.message,
       });
     }
-
   };
 
   const onCancel = () => {
@@ -141,12 +139,9 @@ export const CreateDocument: FunctionComponent<Props> = (props) => {
         </SecondaryHeader>;
       }}
     >
-
     </DocumentForm>
   );
-
 };
-
 
 export default withRouter(CreateDocument);
 

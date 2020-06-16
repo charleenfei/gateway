@@ -83,7 +83,6 @@ const formModePropMapping = {
 
 export const Collaborators: FunctionComponent<Props> = (props) => {
 
-
   const [{
     collaboratorModelOpened,
     selectedCollaborator,
@@ -92,7 +91,6 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
     collaboratorModelOpened: false,
     formMode: FormModes.ADD,
   });
-
 
   const {
     viewMode,
