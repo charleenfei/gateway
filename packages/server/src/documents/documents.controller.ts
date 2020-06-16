@@ -156,8 +156,10 @@ export class DocumentsController {
         documentFromDb.header.document_id,
       {
         attributes: document.attributes,
-        readAccess: document.header.readAccess,
-        writeAccess: document.header.writeAccess,
+        // @ts-ignore
+        read_access: document.header.read_access,
+        // @ts-ignore
+        write_access: document.header.write_access,
         scheme: CoreapiCreateDocumentRequest.SchemeEnum.Generic,
       },
     );
