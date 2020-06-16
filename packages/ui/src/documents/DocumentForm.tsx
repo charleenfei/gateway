@@ -77,7 +77,6 @@ export class DocumentForm extends React.Component<Props, State> {
 
   onSubmit = (values) => {
 
-    console.log('values in submit', values)
     const { selectedSchema } = this.state;
 
     const payload = {
@@ -91,8 +90,6 @@ export class DocumentForm extends React.Component<Props, State> {
         },
       },
     };
-
-    console.log('payload in submit', payload)
 
     this.props.onSubmit && this.props.onSubmit(payload);
   };
