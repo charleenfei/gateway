@@ -1,7 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { BrowserRouter } from 'react-router-dom';
-import { SearchSelect } from '@centrifuge/axis-search-select';
 import { Anchor, Button, DataTable } from 'grommet';
 import { defaultCollaborators, defaultContacts, defaultUser } from '../../test-utilities/default-data';
 import { withAllProvidersAndContexts } from '../../test-utilities/test-providers';
@@ -14,7 +12,6 @@ import { Modal } from '@centrifuge/axis-modal';
 
 
 describe('Collaborators', () => {
-
 
   const getDocument = () => {
     return {
@@ -74,6 +71,8 @@ describe('Collaborators', () => {
     };
   };
 
+  const addCollaboratorToPayload = jest.fn(() => {
+  });
 
   it('Should render a empty list of collaborators and not render the add button', () => {
 
@@ -88,7 +87,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={true}/>
+            viewMode={true}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -124,7 +125,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -179,7 +182,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={defaultCollaborators}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -212,7 +217,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -252,7 +259,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -295,7 +304,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -332,7 +343,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
@@ -377,7 +390,9 @@ describe('Collaborators', () => {
           <Collaborators
             contacts={defaultContacts}
             collaborators={[]}
-            viewMode={false}/>
+            viewMode={false}
+            addCollaboratorToPayload={addCollaboratorToPayload}
+          />
         </Formik>,
       ),
     );
