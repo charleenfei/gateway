@@ -18,12 +18,13 @@ import CollaboratorForm from './CollaboratorForm';
 import { canWriteToDoc } from '@centrifuge/gateway-lib/models/user';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
 
-
 interface OuterProps {
   contacts: Contact[],
   collaborators: Collaborator[],
   viewMode: boolean,
+  addCollaboratorToPayload: (collaborators: Array<any>) => void
 }
+
 
 type Props = OuterProps & {
   formik: FormikContext<Document>
@@ -93,6 +94,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
   });
 
   const {
+    addCollaboratorToPayload,
     viewMode,
     contacts,
     collaborators,
@@ -112,6 +114,8 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
       collaborator => ! contactsInstance.find(
         contact => collaborator.address.toLowerCase() === contact.address.toLowerCase())
     ));
+
+    addCollaboratorToPayload(contactsInstance)
   }
 
   const openCollaboratorFormInAddMode = () => {
@@ -145,7 +149,6 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
     });
   };
 
-
   const closeModal = () => {
     setState({
       collaboratorModelOpened: false,
@@ -171,7 +174,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
     ] as Collaborator[]);
   };
 
-  const updateCollaborators = (collaborators: Collaborator[]) => {
+    const updateCollaborators = (collaborators: Collaborator[]) => {
     const accessLists = createDocumentCollaborators(collaborators);
     setFieldValue('header', {
       ...values.header,

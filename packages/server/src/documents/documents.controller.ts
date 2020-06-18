@@ -43,9 +43,9 @@ export class DocumentsController {
       {
         attributes: payload.attributes,
         // @ts-ignore
-        read_access: payload.header.read_access,
+        read_access: payload.header.read_access ? payload.header.read_access : [],
         // @ts-ignore
-        write_access: payload.header.write_access,
+        write_access: payload.header.write_access ? payload.header.write_access : [],
         scheme: CoreapiCreateDocumentRequest.SchemeEnum.Generic,
       },
     );
@@ -157,9 +157,9 @@ export class DocumentsController {
       {
         attributes: document.attributes,
         // @ts-ignore
-        read_access: document.header.read_access,
+        read_access: document.header ? document.header.read_access : [],
         // @ts-ignore
-        write_access: document.header.write_access,
+        write_access: document.header ? document.header.write_access : [],
         scheme: CoreapiCreateDocumentRequest.SchemeEnum.Generic,
       },
     );
