@@ -91,7 +91,6 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
     }
   }, [setState, displayPageError]);
 
-
   const getFilteredDocuments = () => {
     const sortableDocuments = documents.map((doc: any) => {
       return {
@@ -123,6 +122,17 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
   if (error) {
     return <PageError error={error}/>;
   }
+
+  const displayEdit = (doc: string, nft: string) => {
+    if (nft !== 'Minting...') {
+      return doc === 'Created' || doc === '';
+    }
+    return false
+  };
+
+  const displayView = (doc: string, nft: string) => {
+    return nft !== 'Minting...' && doc !== 'Document creation failed';
+  };
 
   return (
     <Box>
@@ -193,7 +203,7 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
               sortable: false,
               render: datum => (
                 <Box direction="row" gap="small">
-                  {datum.nft_status !== 'Minting...' && datum.document_status !== 'Document creation failed' && <Anchor
+                  {displayView(datum.document_status, datum.nft_status) && <Anchor
                     label={'View'}
                     onClick={() =>
                       push(
@@ -201,7 +211,7 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
                       )
                     }
                   />}
-                  {canWriteToDoc(user!, datum) && datum.document_status === 'Created' && datum.nft_status !== 'Minting...' && <Anchor
+                  {canWriteToDoc(user!, datum) && displayEdit(datum.document_status, datum.nft_status) && <Anchor
                     label={'Edit'}
                     onClick={() =>
                       push(
