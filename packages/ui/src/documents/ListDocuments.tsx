@@ -26,16 +26,13 @@ type State = {
   display: DisplayTypes
   error: any;
 }
-
 enum DisplayTypes {
   All = 'All',
   Sent = 'Sent',
   Received = 'Received'
 }
 
-
 const displayOptions: DisplayTypes[] = [DisplayTypes.All, DisplayTypes.Sent, DisplayTypes.Received];
-
 
 export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
 
