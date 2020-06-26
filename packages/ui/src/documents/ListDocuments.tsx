@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Anchor, Box, Button, FormField, Heading, Select } from 'grommet';
 import documentRoutes from './routes';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Document } from '@centrifuge/gateway-lib/models/document';
+import {Document, DocumentStatus, NftStatus} from '@centrifuge/gateway-lib/models/document';
 import { SecondaryHeader } from '../components/SecondaryHeader';
 import { canCreateDocuments, canWriteToDoc } from '@centrifuge/gateway-lib/models/user';
 import { Preloader } from '../components/Preloader';
@@ -32,6 +32,7 @@ enum DisplayTypes {
   Sent = 'Sent',
   Received = 'Received'
 }
+
 
 const displayOptions: DisplayTypes[] = [DisplayTypes.All, DisplayTypes.Sent, DisplayTypes.Received];
 
@@ -123,15 +124,15 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
     return <PageError error={error}/>;
   }
 
-  const displayEdit = (doc: string, nft: string) => {
-    if (nft !== 'Minting...') {
-      return doc === 'Created' || doc === '';
+  const displayEdit = (doc_status: string, nft_status: string) => {
+    if (nft_status !== NftStatus.Minting) {
+      return doc_status === DocumentStatus.Created || doc_status === '';
     }
     return false
   };
 
-  const displayView = (doc: string, nft: string) => {
-    return nft !== 'Minting...' && doc !== 'Document creation failed';
+  const displayView = (doc_status: string, nft_status: string) => {
+    return nft_status !==  NftStatus.Minting && doc_status !== DocumentStatus.CreationFail;
   };
 
   return (
