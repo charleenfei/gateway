@@ -108,7 +108,6 @@ export class DocumentForm extends React.Component<Props, State> {
     let read_access = [];
     let write_access = [];
 
-    if (collaborators.length > 0) {
       collaborators.forEach(c => {
         // @ts-ignore
         if ( c.access === 'read_access' && !read_access.includes(c.address)) {
@@ -121,9 +120,8 @@ export class DocumentForm extends React.Component<Props, State> {
           write_access.push(c.address)
         }
       })
-  }
     // @ts-ignore
-    document.header.read_access = read_access
+    document.header.read_access = read_access;
     // @ts-ignore
     document.header.write_access= write_access
   };
