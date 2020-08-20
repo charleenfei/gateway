@@ -21,6 +21,7 @@
     "jsx": "preserve",
     "strictPropertyInitialization": false,
     "lib": [
+      "es2015",
       "dom",
       "dom.iterable",
       "esnext"
