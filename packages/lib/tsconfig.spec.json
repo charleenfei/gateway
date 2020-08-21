@@ -8,6 +8,9 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "suppressExcessPropertyErrors": true,
-    "strictFunctionTypes": false
+    "strictFunctionTypes": false,
+    "lib": [
+      "es2015",
+    ]
   }
 }
