@@ -42,6 +42,7 @@ describe('SchemasController', () => {
         ],
       },
     ],
+    template: '',
     collaborators: [],
   });
   let schemaToCreate;
@@ -93,13 +94,11 @@ describe('SchemasController', () => {
       await expect(schemasController.create(
         schemaToCreate,
       )).rejects.toMatchObject({
-        message: {
           message: `Schema with name ${schemaToCreate.name} exists in the database`,
-        },
       });
     });
 
-    it('should throw error when registry address is of the wrong format', async function() {
+    it('should throw error when registry address is of the wrong format', async () => {
       expect.assertions(3);
       const schemasController = schemaModule.get<SchemasController>(
         SchemasController,
@@ -124,13 +123,13 @@ describe('SchemasController', () => {
           ],
         } as Schema);
       } catch (err) {
-        expect(err.message.message).toMatch(RegistriesErrors.ADDRESS_FORMAT);
+        expect(err.message).toMatch(RegistriesErrors.ADDRESS_FORMAT);
         expect(err.status).toEqual(400);
         expect(err instanceof HttpException).toEqual(true);
       }
     });
 
-    it('should throw error when there is no reference id attribute', async function() {
+    it('should throw error when there is no reference id attribute', async () => {
       expect.assertions(3);
       const schemasController = schemaModule.get<SchemasController>(
         SchemasController,
@@ -156,12 +155,12 @@ describe('SchemasController', () => {
           ],
         } as Schema);
       } catch (err) {
-        expect(err.message.message).toEqual(AttributesErrors.REFERENCE_ID_MISSING);
+        expect(err.message).toEqual(AttributesErrors.REFERENCE_ID_MISSING);
         expect(err.status).toEqual(400);
         expect(err instanceof HttpException).toEqual(true);
       }
     });
-    it('should throw error when there attributes are nested', async function() {
+    it('should throw error when attributes are nested', async function() {
       expect.assertions(4);
       const schemasController = schemaModule.get<SchemasController>(
         SchemasController,
@@ -187,8 +186,8 @@ describe('SchemasController', () => {
           ],
         } as Schema);
       } catch (err) {
-        expect(err.message.message).toMatch(AttributesErrors.NESTED_ATTRIBUTES_NOT_SUPPORTED);
-        expect(err.message.message).toMatch('document.qualities');
+        expect(err.message).toMatch(AttributesErrors.NESTED_ATTRIBUTES_NOT_SUPPORTED);
+        expect(err.message).toMatch('document.qualities');
         expect(err.status).toEqual(400);
         expect(err instanceof HttpException).toEqual(true);
       }
@@ -269,8 +268,8 @@ describe('SchemasController', () => {
     });
   });
 
-  describe('update', function() {
-    it('should update the schema in the database', async function() {
+  describe('update', () => {
+    it('should update the schema in the database', async () => {
       const schemasController = schemaModule.get<SchemasController>(
         SchemasController,
       );
@@ -340,7 +339,7 @@ describe('SchemasController', () => {
           updateSchemaObject2,
         );
       } catch (err) {
-        expect(err.message.message).toEqual(DiffErrors.NAME_CHANGE_FORBIDEN);
+        expect(err.message).toEqual(DiffErrors.NAME_CHANGE_FORBIDEN);
         expect(err.status).toEqual(400);
         expect(err instanceof HttpException).toEqual(true);
       }
