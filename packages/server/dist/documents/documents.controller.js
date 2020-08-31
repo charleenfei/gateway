@@ -12,11 +12,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -29,15 +28,52 @@ const document_1 = require("@centrifuge/gateway-lib/models/document");
 const constants_1 = require("@centrifuge/gateway-lib/utils/constants");
 const SessionGuard_1 = require("../auth/SessionGuard");
 const custom_attributes_1 = require("@centrifuge/gateway-lib/utils/custom-attributes");
+var TypeEnum = centrifuge_node_client_1.CoreapiAttributeResponse.TypeEnum;
+var SchemeEnum = centrifuge_node_client_1.CoreapiDocumentResponse.SchemeEnum;
+class CommitResp {
+}
+exports.CommitResp = CommitResp;
 let DocumentsController = class DocumentsController {
     constructor(databaseService, centrifugeService) {
         this.databaseService = databaseService;
         this.centrifugeService = centrifugeService;
     }
+    getDocFromDB(docId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const documentFromDb = yield this.databaseService.documents.findOne({ _id: docId });
+            if (!documentFromDb)
+                throw new common_1.NotFoundException(`Can not find document #${docId} in the database`);
+            return documentFromDb;
+        });
+    }
+    commitPendingDoc(createResult, request) {
+        return __awaiter(this, void 0, void 0, function* () {
+            createResult.document_status = document_1.DocumentStatus.Creating;
+            createResult.nft_status = document_1.NftStatus.NoNft;
+            const created = yield this.databaseService.documents.insert(Object.assign({}, createResult, { ownerId: request.user._id }));
+            createResult.attributes = custom_attributes_1.unflatten(createResult.attributes);
+            const commitResult = yield this.centrifugeService.documents.commitDocumentV2(request.user.account, createResult.header.document_id);
+            const commitResp = {
+                commitResult,
+                dbId: created._id,
+            };
+            return commitResp;
+        });
+    }
+    updateDBDoc(updateResult, id, userID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const updated = yield this.centrifugeService.pullForJobComplete(updateResult.header.job_id, userID);
+            return yield this.databaseService.documents.updateById(id, {
+                $set: {
+                    document_status: (updated.status === 'success') ? document_1.DocumentStatus.Created : document_1.DocumentStatus.CreationFail,
+                },
+            });
+        });
+    }
     create(request, document) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = Object.assign(Object.assign({}, document), { attributes: Object.assign(Object.assign({}, document.attributes), { _createdBy: {
-                        type: 'bytes',
+            const payload = Object.assign({}, document, { attributes: Object.assign({}, document.attributes, { _createdBy: {
+                        type: TypeEnum.Bytes,
                         value: request.user.account,
                     } }) });
             const createResult = yield this.centrifugeService.documents.createDocumentV2(request.user.account, {
@@ -46,64 +82,55 @@ let DocumentsController = class DocumentsController {
                 write_access: payload.header.write_access ? payload.header.write_access : [],
                 scheme: centrifuge_node_client_1.CoreapiCreateDocumentRequest.SchemeEnum.Generic,
             });
-            createResult.document_status = document_1.DocumentStatus.Creating;
-            createResult.nft_status = document_1.NftStatus.NoNft;
-            const created = yield this.databaseService.documents.insert(Object.assign(Object.assign({}, createResult), { ownerId: request.user._id }));
-            const createAttributes = custom_attributes_1.unflatten(createResult.attributes);
-            createResult.attributes = createAttributes;
-            const commitResult = yield this.centrifugeService.documents.commitDocumentV2(request.user.account, createResult.header.document_id);
-            const commit = yield this.centrifugeService.pullForJobComplete(commitResult.header.job_id, request.user.account);
+            const commitResp = yield this.commitPendingDoc(createResult, request);
+            return yield this.updateDBDoc(commitResp.commitResult, commitResp.dbId, request.user.account);
+        });
+    }
+    clone(request, document, params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const cloneResult = yield this.centrifugeService.documents.cloneDocumentV2(request.user.account, {
+                scheme: SchemeEnum.Generic,
+            }, params.id);
+            document.header = cloneResult.header;
+            const commitResp = yield this.commitPendingDoc(document, request);
+            const commit = yield this.centrifugeService.pullForJobComplete(commitResp.commitResult.header.job_id, request.user.account);
             if (commit.status === 'success') {
-                return yield this.databaseService.documents.updateById(created._id, {
-                    $set: {
-                        document_status: document_1.DocumentStatus.Created,
-                    },
+                const updateResult = yield this.centrifugeService.documents.updateDocument(request.user.account, cloneResult.header.document_id, {
+                    attributes: document.attributes,
+                    scheme: centrifuge_node_client_1.CoreapiCreateDocumentRequest.SchemeEnum.Generic,
                 });
-            }
-            else {
-                return yield this.databaseService.documents.updateById(created._id, {
-                    $set: {
-                        document_status: document_1.DocumentStatus.CreationFail,
-                    },
-                });
+                return yield this.updateDBDoc(updateResult, commitResp.dbId, request.user.account);
             }
         });
     }
     getList(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            const documents = this.databaseService.documents.getCursor({
+            return this.databaseService.documents.getCursor({
                 ownerId: request.user._id,
             }).sort({ updatedAt: -1 }).exec();
-            return documents;
         });
     }
     getById(params, request) {
         return __awaiter(this, void 0, void 0, function* () {
-            const document = yield this.databaseService.documents.findOne({
-                _id: params.id,
-                ownerId: request.user._id,
-            });
-            if (!document)
-                throw new common_1.NotFoundException('Document not found');
+            const document = yield this.getDocFromDB(params.id);
             try {
                 const docFromNode = yield this.centrifugeService.documents.getDocument(request.user.account, document.header.document_id);
-                return Object.assign(Object.assign({ _id: document._id }, docFromNode), { attributes: Object.assign({}, custom_attributes_1.unflatten(docFromNode.attributes)) });
+                return Object.assign({ _id: document._id }, docFromNode, { attributes: Object.assign({}, custom_attributes_1.unflatten(docFromNode.attributes)) });
             }
             catch (error) {
                 return document;
             }
         });
     }
-    updateById(params, request, document) {
+    updateById(params, request, updateDocRequest) {
         return __awaiter(this, void 0, void 0, function* () {
-            const documentFromDb = yield this.databaseService.documents.findOne({ _id: params.id });
-            if (!documentFromDb)
-                throw new common_1.NotFoundException(`Can not find document #${params.id} in the database`);
-            delete document.attributes.funding_agreement;
+            const documentFromDb = yield this.getDocFromDB(params.id);
+            const header = updateDocRequest.header;
+            delete updateDocRequest.attributes.funding_agreement;
             const updateResult = yield this.centrifugeService.documents.updateDocument(request.user.account, documentFromDb.header.document_id, {
-                attributes: document.attributes,
-                read_access: document.header ? document.header.read_access : [],
-                write_access: document.header ? document.header.write_access : [],
+                attributes: updateDocRequest.attributes,
+                read_access: header ? header.read_access : [],
+                write_access: header ? header.write_access : [],
                 scheme: centrifuge_node_client_1.CoreapiCreateDocumentRequest.SchemeEnum.Generic,
             });
             yield this.centrifugeService.pullForJobComplete(updateResult.header.job_id, request.user.account);
@@ -125,6 +152,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], DocumentsController.prototype, "create", null);
+__decorate([
+    common_1.Post(':id/clone'),
+    __param(0, common_1.Req()),
+    __param(1, common_1.Body()),
+    __param(2, common_1.Param()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], DocumentsController.prototype, "clone", null);
 __decorate([
     common_1.Get(),
     __param(0, common_1.Req()),

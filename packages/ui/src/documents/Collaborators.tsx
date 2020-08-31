@@ -156,6 +156,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
   };
 
   const removeCollaborator = (collaborator: Collaborator) => {
+    console.log(collaborator, props)
     updateCollaborators(contactsInstance.filter(c => {
       return c.address.toLowerCase() !== collaborator.address.toLowerCase();
     }) as Collaborator[]);
@@ -177,9 +178,10 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
     const updateCollaborators = (collaborators: Collaborator[]) => {
     const accessLists = createDocumentCollaborators(collaborators);
     setFieldValue('header', {
-      ...values.header,
+      // ...values.header,
       ...accessLists,
     });
+      addCollaboratorToPayload(collaborators)
   };
 
   const collaboratorActions = !viewMode ? [
