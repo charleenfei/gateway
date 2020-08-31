@@ -156,7 +156,6 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
   };
 
   const removeCollaborator = (collaborator: Collaborator) => {
-    console.log(collaborator, props)
     updateCollaborators(contactsInstance.filter(c => {
       return c.address.toLowerCase() !== collaborator.address.toLowerCase();
     }) as Collaborator[]);
