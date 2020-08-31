@@ -178,7 +178,7 @@ export const Collaborators: FunctionComponent<Props> = (props) => {
     const updateCollaborators = (collaborators: Collaborator[]) => {
     const accessLists = createDocumentCollaborators(collaborators);
     setFieldValue('header', {
-      // ...values.header,
+      ...values.header,
       ...accessLists,
     });
       addCollaboratorToPayload(collaborators)
