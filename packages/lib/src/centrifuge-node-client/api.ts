@@ -14,7 +14,7 @@
 
 
 import * as url from "url";
-const portableFetch = require("portable-fetch")
+const portableFetch = require("portable-fetch");
 import { Configuration } from "./configuration";
 
 const BASE_PATH = "http://localhost:8082".replace(/\/+$/, "");
@@ -883,6 +883,14 @@ export interface CoreapiTransferNFTResponse {
 /**
  * 
  * @export
+ * @interface DocumentsAttrKey
+ */
+export interface DocumentsAttrKey extends Array<number> {
+}
+
+/**
+ * 
+ * @export
  * @interface DocumentsProof
  */
 export interface DocumentsProof {
@@ -1403,6 +1411,14 @@ export interface JobsStatusResponse {
 /**
  * 
  * @export
+ * @interface NftTokenID
+ */
+export interface NftTokenID extends Array<number> {
+}
+
+/**
+ * 
+ * @export
  * @interface NotificationMessage
  */
 export interface NotificationMessage {
@@ -1460,6 +1476,64 @@ export interface NotificationMessage {
      * @memberof NotificationMessage
      */
     toId?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface OraclePushAttributeToOracleRequest
+ */
+export interface OraclePushAttributeToOracleRequest {
+    /**
+     * hex value of the Attribute key
+     * @type {string}
+     * @memberof OraclePushAttributeToOracleRequest
+     */
+    attributeKey?: string;
+    /**
+     * hex value of the Oracle address
+     * @type {string}
+     * @memberof OraclePushAttributeToOracleRequest
+     */
+    oracleAddress?: string;
+    /**
+     * hex value of the NFT token
+     * @type {string}
+     * @memberof OraclePushAttributeToOracleRequest
+     */
+    tokenId?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface OraclePushToOracleResponse
+ */
+export interface OraclePushToOracleResponse {
+    /**
+     * hex value of the Attribute key
+     * @type {string}
+     * @memberof OraclePushToOracleResponse
+     */
+    attributeKey?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OraclePushToOracleResponse
+     */
+    jobId?: string;
+    /**
+     * hex value of the Oracle address
+     * @type {string}
+     * @memberof OraclePushToOracleResponse
+     */
+    oracleAddress?: string;
+    /**
+     * hex value of the NFT token
+     * @type {string}
+     * @memberof OraclePushToOracleResponse
+     */
+    tokenId?: string;
 }
 
 /**
@@ -6215,6 +6289,53 @@ export const NFTsApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * Pushes a given attribute value to oracle.
+         * @summary Pushes a given attribute value to oracle.
+         * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
+         * @param {OraclePushAttributeToOracleRequest} body Push Attribute to Oracle Request
+         * @param {string} documentId Document Identifier
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pushAttributeOracle(authorization: string, body: OraclePushAttributeToOracleRequest, documentId: string, options: any = {}): FetchArgs {
+            // verify required parameter 'authorization' is not null or undefined
+            if (authorization === null || authorization === undefined) {
+                throw new RequiredError('authorization','Required parameter authorization was null or undefined when calling pushAttributeOracle.');
+            }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling pushAttributeOracle.');
+            }
+            // verify required parameter 'documentId' is not null or undefined
+            if (documentId === null || documentId === undefined) {
+                throw new RequiredError('documentId','Required parameter documentId was null or undefined when calling pushAttributeOracle.');
+            }
+            const localVarPath = `/v2/documents/{document_id}/push_to_oracle`
+                .replace(`{${"document_id"}}`, encodeURIComponent(String(documentId)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['authorization'] = String(authorization);
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"OraclePushAttributeToOracleRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Transfers given NFT to provide address.
          * @summary Transfers given NFT to provide address.
          * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
@@ -6319,6 +6440,27 @@ export const NFTsApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Pushes a given attribute value to oracle.
+         * @summary Pushes a given attribute value to oracle.
+         * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
+         * @param {OraclePushAttributeToOracleRequest} body Push Attribute to Oracle Request
+         * @param {string} documentId Document Identifier
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pushAttributeOracle(authorization: string, body: OraclePushAttributeToOracleRequest, documentId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OraclePushToOracleResponse> {
+            const localVarFetchArgs = NFTsApiFetchParamCreator(configuration).pushAttributeOracle(authorization, body, documentId, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Transfers given NFT to provide address.
          * @summary Transfers given NFT to provide address.
          * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
@@ -6374,6 +6516,18 @@ export const NFTsApiFactory = function (configuration?: Configuration, fetch?: F
             return NFTsApiFp(configuration).ownerOfNft(authorization, tokenId, registryAddress, options)(fetch, basePath);
         },
         /**
+         * Pushes a given attribute value to oracle.
+         * @summary Pushes a given attribute value to oracle.
+         * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
+         * @param {OraclePushAttributeToOracleRequest} body Push Attribute to Oracle Request
+         * @param {string} documentId Document Identifier
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pushAttributeOracle(authorization: string, body: OraclePushAttributeToOracleRequest, documentId: string, options?: any) {
+            return NFTsApiFp(configuration).pushAttributeOracle(authorization, body, documentId, options)(fetch, basePath);
+        },
+        /**
          * Transfers given NFT to provide address.
          * @summary Transfers given NFT to provide address.
          * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
@@ -6422,6 +6576,20 @@ export class NFTsApi extends BaseAPI {
      */
     public ownerOfNft(authorization: string, tokenId: string, registryAddress: string, options?: any) {
         return NFTsApiFp(this.configuration).ownerOfNft(authorization, tokenId, registryAddress, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Pushes a given attribute value to oracle.
+     * @summary Pushes a given attribute value to oracle.
+     * @param {string} authorization Hex encoded centrifuge ID of the account for the intended API action
+     * @param {OraclePushAttributeToOracleRequest} body Push Attribute to Oracle Request
+     * @param {string} documentId Document Identifier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTsApi
+     */
+    public pushAttributeOracle(authorization: string, body: OraclePushAttributeToOracleRequest, documentId: string, options?: any) {
+        return NFTsApiFp(this.configuration).pushAttributeOracle(authorization, body, documentId, options)(this.fetch, this.basePath);
     }
 
     /**

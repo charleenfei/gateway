@@ -1,18 +1,22 @@
 import { Body, Controller, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CentrifugeService } from '../centrifuge-client/centrifuge.service';
-import { CoreapiMintNFTRequest } from '@centrifuge/gateway-lib/centrifuge-node-client';
+import {
+  CoreapiMintNFTRequest,
+  OraclePushAttributeToOracleRequest, OraclePushToOracleResponse
+} from '@centrifuge/gateway-lib/centrifuge-node-client';
 import {Document, DocumentRequest, NftStatus} from '@centrifuge/gateway-lib/models/document';
 import { MintNftRequest } from '@centrifuge/gateway-lib/models/nfts';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
 import { SessionGuard } from '../auth/SessionGuard';
 
+
 @Controller(ROUTES.NFTS)
 @UseGuards(SessionGuard)
 export class NftsController {
   constructor(
-    private readonly databaseService: DatabaseService,
-    private readonly centrifugeService: CentrifugeService,
+      private readonly databaseService: DatabaseService,
+      private readonly centrifugeService: CentrifugeService,
   ) {
   }
 
@@ -25,8 +29,8 @@ export class NftsController {
    */
   @Post('/mint')
   async mintNFT(
-    @Req() request,
-    @Body() body: MintNftRequest,
+      @Req() request,
+      @Body() body: MintNftRequest,
   ) {
     const payload: CoreapiMintNFTRequest = {
       // @ts-ignore
@@ -37,14 +41,16 @@ export class NftsController {
     };
 
     const mintingResult: Document = await this.centrifugeService.nft.mintNft(
-      request.user.account,
-      body.registry_address,
-      payload,
+        request.user.account,
+        body.registry_address,
+        payload,
     );
+    console.log(mintingResult)
 
     const doc = await this.databaseService.documents.findOne(
-        { 'header.document_id': mintingResult.document_id },
+        {'header.document_id': mintingResult.document_id},
     );
+    console.log('here is your document', doc)
     await this.databaseService.documents.updateById(doc._id, {
       $set: {
         nft_status: NftStatus.Minting,
@@ -59,6 +65,13 @@ export class NftsController {
           nft_status: NftStatus.Minted,
         },
       });
+
+      // return await this.centrifugeService.nft.pushAttributeOracle(request.user.account, {
+      //   // @ts-ignore
+      //   attribute_key: '',
+      //   oracle_address: doc.attributes.oracle_address,
+      //   token_id: 'INSERT TOKEN ID HERE',
+      // }, doc.document_id)
     } else {
       return await this.databaseService.documents.updateById(doc._id, {
         $set: {

@@ -11,3 +11,10 @@ export class TransferNftRequest {
   to: string;
   registry: string;
 }
+
+export class PushToOracleRequest {
+  document_id: string;
+  attribute_key: string;
+  oracle_address: string;
+  token_id: string;
+}
