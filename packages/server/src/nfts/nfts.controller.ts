@@ -33,7 +33,6 @@ export class NftsController {
       @Body() body: MintNftRequest,
   ) {
     const payload: CoreapiMintNFTRequest = {
-      // @ts-ignore
       asset_manager_address: body.asset_manager_address,
       document_id: body.document_id,
       proof_fields: body.proof_fields,
@@ -56,7 +55,7 @@ export class NftsController {
         nft_status: NftStatus.Minting,
       },
     });
-    // @ts-ignore
+
     const mint = await this.centrifugeService.pullForJobComplete(mintingResult.header.job_id, request.user.account);
 
     if (mint.status === 'success') {
