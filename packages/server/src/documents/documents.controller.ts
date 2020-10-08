@@ -4,8 +4,7 @@ import { CentrifugeService } from '../centrifuge-client/centrifuge.service';
 import {
   CoreapiAttributeResponse,
   CoreapiCreateDocumentRequest, CoreapiDocumentResponse,
-  CoreapiResponseHeader, OraclePushAttributeToOracleRequest, OraclePushToOracleResponse
-} from '@centrifuge/gateway-lib/centrifuge-node-client';
+  CoreapiResponseHeader } from '@centrifuge/gateway-lib/centrifuge-node-client';
 import { Document, DocumentStatus, NftStatus } from '@centrifuge/gateway-lib/models/document';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
 import { SessionGuard } from '../auth/SessionGuard';
@@ -142,33 +141,6 @@ export class DocumentsController {
       );
       return await this.updateDBDoc(updateResult, commitResp.dbId, request.user.account);
     }
-  }
-
-  @Post(':id/push_to_oracle')
-  /**
-   * Pushes the value of an attribute to an oracle contract
-   * @async
-   * @param {Param} params - the query params
-   * @param request - the http request
-   * @param {OraclePushAttributeToOracleRequest} body - the body of the request
-   * @return {Promise<OraclePushToOracleResponse>} result
-   */
-  async pushToOracle(
-      @Req() request,
-      @Body() body: OraclePushAttributeToOracleRequest,
-      @Param() params,
-  ): Promise<OraclePushToOracleResponse> {
-
-    return await this.centrifugeService.nft.pushAttributeOracle(
-        request.user.account,
-        {
-          // @ts-ignore
-          attribute_key: 'assetValue',
-          oracle_address: request.oracle_address,
-          token_id: request.tokenId,
-        },
-        params.id,
-    );
   }
 
   @Get()
