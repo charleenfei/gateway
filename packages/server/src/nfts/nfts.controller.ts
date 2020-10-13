@@ -60,6 +60,7 @@ export class NftsController {
         },
       });
 
+      if (!doc.attributes.oracle_address) { return }
       return await this.centrifugeService.nft.pushAttributeOracle(request.user.account, {
         // TODO: this attribute key is a hardcoded hash of 'result' --  we should update this when we have a UI mockup
         attribute_key: '0xf6a214f7a5fcda0c2cee9660b7fc29f5649e3c68aad48e20e950137c98913a68',
