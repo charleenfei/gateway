@@ -61,7 +61,7 @@ export class NftsController {
       });
 
       if (!doc.attributes.oracle_address) {
-        // console.log('not pushing to oracle', doc)
+        console.log('not pushing to oracle', doc)
         return
       }
 
