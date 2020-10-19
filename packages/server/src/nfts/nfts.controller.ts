@@ -60,7 +60,7 @@ export class NftsController {
         },
       });
 
-      if (!body.oracle_address) {
+      if (body.oracle_address === '0x0000000000000000000000000000000000000000') {
         console.log('not pushing to oracle', doc)
         return
       }
