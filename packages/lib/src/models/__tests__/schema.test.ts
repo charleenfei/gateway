@@ -535,6 +535,7 @@ describe('Schema validations', () => {
         formFeatures: {},
         archived: true,
         template: '',
+        oracle_address: '',
       };
 
       const editableJson = Schema.toEditableJson({
