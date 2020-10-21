@@ -289,7 +289,7 @@ describe('SchemasController', () => {
             label: 'animal_registry',
             address: '0x87c574FB2DF0EaA2dAf5fc4a8A16dd3Ce39011B1',
             asset_manager_address: '0x3Ba4280217e78a0EaEA612c1502FC2e92A7FE5D7',
-            oracle_address: '0x3Ba4280217e78a0EaEA612c1502FC2e92A7FE5D7',
+            oracle_address: '0x0000000000000000000000000000000000000000',
             proofs: ['attributes.wingspan'],
           },
         ],
@@ -317,7 +317,7 @@ describe('SchemasController', () => {
             registries: [{
               address: '0x87c574FB2DF0EaA2dAf5fc4a8A16dd3Ce39011B1',
               asset_manager_address: '0x3Ba4280217e78a0EaEA612c1502FC2e92A7FE5D7',
-              oracle_address: '0x3Ba4280217e78a0EaEA612c1502FC2e92A7FE5D7',
+              oracle_address: '0x0000000000000000000000000000000000000000',
               label: 'animal_registry',
               proofs: ['attributes.wingspan'],
             }],
