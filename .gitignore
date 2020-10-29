@@ -77,3 +77,6 @@ db
 packages/*/.DS_Store
 packages/.DS_Store
 .DS_Store
+
+#email-templates
+email-templates
