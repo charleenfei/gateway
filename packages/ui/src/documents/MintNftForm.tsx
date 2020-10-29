@@ -35,6 +35,9 @@ export default class MintNftForm extends React.Component<Props> {
 
   render() {
 
+    console.log(this.state, "STATE IN NFT")
+    console.log(this.props, "PROPS IN NFT")
+
     const { submitted } = this.state;
     const { registries } = this.props;
 
