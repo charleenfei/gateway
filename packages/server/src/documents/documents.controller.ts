@@ -66,7 +66,7 @@ export class DocumentsController {
       commitResult.header.job_id,
       user.account,
     );
-    return await this.databaseService.documents.updateById(document._id, {
+    return await this.databaseService.documents.update({'header.document_id': document.header.document_id}, {
       $set: {
         document_status:
           updated.status === 'success'
