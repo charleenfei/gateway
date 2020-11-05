@@ -102,7 +102,7 @@ export const CreateDocument: FunctionComponent<Props> = (props) => {
           createResult = (await httpClient.documents.create(document)).data;
         }
         push(documentRoutes.index);
-        await httpClient.documents.update({
+        await httpClient.documents.updatePendingDoc({
           ...createResult,
           attributes: {
             ...createResult.attributes,
@@ -111,7 +111,6 @@ export const CreateDocument: FunctionComponent<Props> = (props) => {
               value: createResult.header!.document_id,
             } as any,
           }
-
         })
         await httpClient.documents.commit(createResult._id!)
         go(0);

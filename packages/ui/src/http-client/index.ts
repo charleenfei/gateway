@@ -62,6 +62,7 @@ export const httpClient = {
     list: async () => instance.get(ROUTES.DOCUMENTS),
     getById: async (id): Promise<Document> => instance.get(`${ROUTES.DOCUMENTS}/${id}`),
     update: async (document: Document) => instance.put(`${ROUTES.DOCUMENTS}/${document._id}`, document),
+    updatePendingDoc: async(document: Document) => instance.patch(`${ROUTES.DOCUMENTS}/${document._id}`, document),
     //TODO we should not use template as the document _id.
     clone: async (document: Document) => instance.post<Document>(`${ROUTES.DOCUMENTS}/${document.template}/clone`, document),
     commit: async (id: string) => instance.put(`${ROUTES.DOCUMENTS}/${id}/commit`),

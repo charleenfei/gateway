@@ -3,7 +3,7 @@ import {
   Controller, ForbiddenException,
   Get,
   NotFoundException,
-  Param,
+  Param, Patch,
   Post,
   Put,
   Req,
@@ -61,6 +61,7 @@ export class DocumentsController {
       user.account,
       document.header.document_id,
     );
+
 
     const updated = await this.centrifugeService.pullForJobComplete(
       commitResult.header.job_id,
@@ -149,7 +150,7 @@ export class DocumentsController {
         },
       },
     };
-    return  await this.saveDoc(payload, request.user)
+    return await this.saveDoc(payload, request.user)
   }
 
   @Post(':id/clone')
@@ -229,6 +230,47 @@ export class DocumentsController {
   }
 
   /**
+   * Updates a pending doc and saves in the centrifuge node and local database
+   * @async
+   * @param {Param} params - the query params
+   * @param {Param} request - the http request
+   * @param {Document} updateDocRequest - the updated doc
+   * @return {Promise<DocumentRequest>} result
+   */
+  @Patch(':id')
+  async updatePendingDoc(
+      @Param() params,
+      @Req() request,
+      @Body() updateDocRequest: Document,
+  ) {
+    const documentFromDb: Document = await this.getDocFromDB(params.id);
+    const header: CoreapiResponseHeader = updateDocRequest.header;
+
+    // Node does not support signed attributes
+    delete updateDocRequest.attributes.funding_agreement;
+    const updateResult: Document = await this.centrifugeService.documents.updateDocumentV2(
+        request.user.account,
+        {
+          attributes: updateDocRequest.attributes,
+          read_access: header ? header.read_access : [],
+          write_access: header ? header.write_access : [],
+          scheme: CoreapiCreateDocumentRequest.SchemeEnum.Generic,
+        },
+        documentFromDb.header.document_id,
+    );
+
+    const unflattenAttr = unflatten(updateResult.attributes);
+
+    return await this.databaseService.documents.updateById(params.id, {
+      $set: {
+        header: updateResult.header,
+        data: updateResult.data,
+        attributes: unflattenAttr,
+      },
+    });
+  }
+
+  /**
    * Updates a doc and saves in the centrifuge node and local database
    * @async
    * @param {Param} params - the query params
@@ -273,3 +315,5 @@ export class DocumentsController {
     });
   }
 }
+
+
