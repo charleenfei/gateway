@@ -261,7 +261,7 @@ export class DocumentsController {
 
     const unflattenAttr = unflatten(updateResult.attributes);
 
-    return await this.databaseService.documents.updateById(params.id, {
+    return await this.databaseService.documents.update(documentFromDb.header.document_id, {
       $set: {
         header: updateResult.header,
         data: updateResult.data,
@@ -306,7 +306,7 @@ export class DocumentsController {
     );
     const unflattenAttr = unflatten(updateResult.attributes);
 
-    return await this.databaseService.documents.updateById(params.id, {
+    return await this.databaseService.documents.update(documentFromDb.header.document_id, {
       $set: {
         header: updateResult.header,
         data: updateResult.data,
