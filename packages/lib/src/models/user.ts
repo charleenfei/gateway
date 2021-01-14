@@ -55,6 +55,7 @@ export class User implements IUser {
   twoFAType?: TwoFaType;
   enabled: boolean;
   invited: boolean;
+  access_token?: string;
 }
 
 export class UserWithOrg extends User {

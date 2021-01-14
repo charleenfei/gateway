@@ -47,5 +47,6 @@ const config = {
   ethProvider:
     env.ETH_PROVIDER ||
     'https://mainnet.infura.io/v3/55b957b5c6be42c49e6d48cbb102bdd5',
+  jwtSecret: env.JWT_SECRET || 'ma7swmPKeq'
 };
 export default config;
