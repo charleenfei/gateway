@@ -3,9 +3,11 @@ import { SessionGuard } from '../auth/SessionGuard';
 import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
 import { DatabaseService } from '../database/database.service';
+import {JwtAuthGuard} from '../auth/admin.jwt.guard';
 
 @Controller(ROUTES.CONTACTS)
-@UseGuards(SessionGuard)
+@UseGuards(JwtAuthGuard)
+// @UseGuards(SessionGuard)
 export class ContactsController {
   constructor(
     private readonly databaseService: DatabaseService,

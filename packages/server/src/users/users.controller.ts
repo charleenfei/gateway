@@ -24,13 +24,15 @@ import { UserAuthGuard } from '../auth/admin.auth.guard';
 import { isPasswordValid } from '@centrifuge/gateway-lib/utils/validators';
 import { Organization } from '@centrifuge/gateway-lib/models/organization';
 import { MailerService } from '@nestjs-modules/mailer';
+import {JwtService} from "@nestjs/jwt";
 
 @Controller()
 export class UsersController {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly centrifugeService: CentrifugeService,
-    private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService,
+  private readonly mailerService: MailerService,
   ) {}
 
   @Post(ROUTES.USERS.loginTentative)
@@ -72,8 +74,12 @@ export class UsersController {
 
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
-  async login(@Body() user: User, @Request() req): Promise<User> {
-    return req.user;
+  async login(@Body() user: User, @Request() req){
+    const accessToken = this.jwtService.sign({email: user.email, password: user.password})
+    return {
+      user: req.user,
+      token: accessToken
+    };
   }
 
   @Get(ROUTES.USERS.logout)

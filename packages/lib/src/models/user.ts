@@ -7,6 +7,7 @@ import {
 } from './document';
 import { FundingAgreement } from './funding-request';
 import { CoreapiNFT } from '../centrifuge-node-client';
+import {forEachToken} from "tslint";
 
 export interface IUser {
   name: string;
@@ -40,6 +41,11 @@ export type TwoFASecret = {
   otpauth_url: string;
 };
 
+export type LoggedInUser = {
+  user: User;
+  token: string;
+}
+
 export class User implements IUser {
   name: string = '';
   password?: string = '';
@@ -55,7 +61,6 @@ export class User implements IUser {
   twoFAType?: TwoFaType;
   enabled: boolean;
   invited: boolean;
-  access_token?: string;
 }
 
 export class UserWithOrg extends User {

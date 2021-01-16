@@ -3,15 +3,15 @@ import React from 'react';
 import { AppContext } from '../App';
 import { NotificationProvider } from '../components/NotificationContext';
 import { AxisTheme } from '@centrifuge/axis-theme';
-import { defaultUser } from './default-data';
+import {defaultToken, defaultUser} from './default-data';
 
 
 
 
 // Wrap component with Application Context;
 export const withApplicationContext = (Component, user: User = defaultUser, setUser = () => {
-}) => {
-  return (<AppContext.Provider value={{ user, setUser }}>
+}, token = defaultToken, setToken = () => {}) => {
+  return (<AppContext.Provider value={{ user, setUser, token, setToken }}>
     {Component}
   </AppContext.Provider>);
 };
@@ -31,7 +31,7 @@ export const withAxis = (Component) => {
 };
 
 export const withAllProvidersAndContexts = (Component, user: User = defaultUser, setUser = () => {
-}) => {
+}, token = defaultToken, setToken = () => {}) => {
   return withAxis(
     withApplicationContext(
       withNotificationContext(
@@ -39,6 +39,8 @@ export const withAllProvidersAndContexts = (Component, user: User = defaultUser,
       ),
       user,
       setUser,
+      token,
+      setToken
     ),
   );
 };

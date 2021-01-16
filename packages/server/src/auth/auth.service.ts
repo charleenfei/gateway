@@ -34,39 +34,6 @@ export class AuthService {
         passwordValue,
         databaseUser.password,
     );
-
-    if (passwordMatch) {
-      const accessToken = this.jwtService.sign({email: emailValue, password: passwordValue})
-      return {
-        ...databaseUser,
-        access_token: accessToken
-      }
-    }
-    return null
-  }
-
-  /**
-   * Checks that a user/password pair exists in the database, does not generate access token
-   * @async
-   * @param {string} usernameValue
-   * @param {string} passwordValue
-   *
-   * @return {Promise<User|null>} promise - a promise with the validation results. If successful
-   * will return the user, otherwise it returns null.
-   */
-  async validateUserNoJwt(
-      emailValue: string,
-      passwordValue: string,
-  ): Promise<User | null> {
-    const databaseUser: User = await this.database.users.findOne({
-      email: emailValue,
-    });
-    if (!databaseUser || !databaseUser.enabled) return null;
-    const passwordMatch = await promisify(bcrypt.compare)(
-        passwordValue,
-        databaseUser.password,
-    );
-
     return passwordMatch ? databaseUser : null
   }
 

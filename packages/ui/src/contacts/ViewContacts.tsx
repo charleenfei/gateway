@@ -28,8 +28,7 @@ const ViewContacts: FunctionComponent = () => {
   });
 
 
-  const { user } = useContext(AppContext);
-
+  const { user, token } = useContext(AppContext);
 
   const displayPageError = useCallback((error) => {
     setState({
@@ -44,7 +43,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      await httpClient.contacts.create(contact);
+      await httpClient.contacts.create(contact, token);
       await loadContacts();
     } catch (e) {
       displayPageError(e);
@@ -56,7 +55,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      await httpClient.contacts.update(contact);
+      await httpClient.contacts.update(contact, token);
       await loadContacts();
     } catch (e) {
       displayPageError(e);
@@ -68,7 +67,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      const contacts = (await httpClient.contacts.list()).data;
+      const contacts = (await httpClient.contacts.list(token)).data;
       setState({
         loading: false,
         contacts,

@@ -22,21 +22,24 @@ import { DisplayField } from '@centrifuge/axis-display-field';
 import logo from './assets/logo.png';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { theme } from './theme';
+import { LoggedInUser } from "@centrifuge/gateway-lib/src/models/user";
 
 interface AppPros extends RouteComponentProps {
-  loggedInUser: User | null;
+  loggedInUser: LoggedInUser | null;
 }
 
-
-const loggedInUser = window['__PRELOADED_STATE__'] ? window['__PRELOADED_STATE__'].user : null;
+const loggedInUser = window['__PRELOADED_STATE__'] ? window['__PRELOADED_STATE__'] : null;
 
 export const AppContext = React.createContext <{
   user: User | null,
-  setUser: (user) => void
+  setUser: (user) => void,
+  token: string | null,
+  setToken: (token) => void
 }>({
   user: loggedInUser,
-  setUser: (user) => {
-  },
+  setUser: (user) => {},
+  token: loggedInUser,
+  setToken: (token) => {}
 });
 
 
@@ -52,8 +55,8 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
     },
   } = props;
 
-
-  const [user, setUser] = useState(loggedInUser);
+  const [user, setUser] = useState(loggedInUser!.user);
+  const [token, setToken] = useState(loggedInUser!.token);
 
   let menuItems: MenuItem[] = [];
   let routeItems: RouteItem[] = [];
@@ -136,7 +139,7 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
   return (
     <div className="App">
       <AxisTheme theme={theme} full={true}>
-        <AppContext.Provider value={{ user, setUser }}>
+        <AppContext.Provider value={{ user, setUser, token, setToken }}>
           <NotificationProvider>
             <Box align="center">
               <NavBar

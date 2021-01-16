@@ -22,8 +22,6 @@ instance.interceptors.response.use(response => {
   throw error;
 });
 
-
-
 export const httpClient = {
   user: {
     login: async (user: User) => instance.post(ROUTES.USERS.login, user),
@@ -37,10 +35,22 @@ export const httpClient = {
 
   },
   contacts: {
-    create: async (contact: Contact) => instance.post(ROUTES.CONTACTS, contact),
-    list: async () => instance.get(ROUTES.CONTACTS),
-    update: async (contact: Contact) =>
-      instance.put(`${ROUTES.CONTACTS}/${contact._id}`, contact),
+    create: async (contact: Contact, token: string | null) => instance.post(ROUTES.CONTACTS, contact, {
+      headers: {
+        Authorization: "jwt "+ token
+      }
+    }),
+    list: async (token: string | null) => instance.get(ROUTES.CONTACTS, {
+      headers: {
+        Authorization: "jwt "+ token
+      }
+    }),
+    update: async (contact: Contact, token: string | null ) =>
+      instance.put(`${ROUTES.CONTACTS}/${contact._id}`, contact, {
+        headers: {
+          Authorization: "jwt "+ token
+        }
+      }),
   },
   funding: {
     create: async (fundingRequest: FundingRequest) => instance.post(ROUTES.FUNDING.base, fundingRequest),
