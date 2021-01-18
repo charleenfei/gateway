@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   /**
-   * Checks that a user/password pair exists in the database, returns an access token in the response
+   * Checks that a user/password pair exists in the database
    * @async
    * @param {string} usernameValue
    * @param {string} passwordValue
@@ -21,18 +21,18 @@ export class AuthService {
    * will return the user, otherwise it returns null.
    */
   async validateUser(
-      emailValue: string,
-      passwordValue: string,
+    emailValue: string,
+    passwordValue: string,
   ): Promise<User | null> {
     const databaseUser: User = await this.database.users.findOne({
       email: emailValue,
     });
     if (!databaseUser || !databaseUser.enabled) return null;
     const passwordMatch = await promisify(bcrypt.compare)(
-        passwordValue,
-        databaseUser.password,
+      passwordValue,
+      databaseUser.password,
     );
-    return passwordMatch ? databaseUser : null
+    return passwordMatch ? databaseUser : null;
   }
 
   /**
