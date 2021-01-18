@@ -2,12 +2,9 @@ import { PERMISSIONS } from '../utils/constants';
 import {
   Document,
   DOCUMENT_ACCESS,
-  DocumentStatus,
-  NftStatus,
 } from './document';
 import { FundingAgreement } from './funding-request';
 import { CoreapiNFT } from '../centrifuge-node-client';
-import {forEachToken} from "tslint";
 
 export interface IUser {
   name: string;

@@ -16,7 +16,7 @@ import * as speakeasy from 'speakeasy';
 import * as bcrypt from 'bcrypt';
 import { promisify } from 'util';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
-import { TwoFaType, User, UserWithOrg } from '@centrifuge/gateway-lib/models/user';
+import {LoggedInUser, TwoFaType, User, UserWithOrg} from '@centrifuge/gateway-lib/models/user';
 import { DatabaseService } from '../database/database.service';
 import config from '../config';
 import { CentrifugeService } from '../centrifuge-client/centrifuge.service';
@@ -37,7 +37,7 @@ export class UsersController {
 
   @Post(ROUTES.USERS.loginTentative)
   @HttpCode(200)
-  async loginTentative(@Request() req) {
+  async loginTentative(@Request() req) : Promise<LoggedInUser> {
     let { user } = req;
     if(user.twoFAType !== TwoFaType.APP) {
       if (!user.secret) {
@@ -78,7 +78,7 @@ export class UsersController {
 
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
-  async login(@Body() user: User, @Request() req) {
+  async login(@Body() user: User, @Request() req) : Promise<LoggedInUser> {
     const accessToken = this.jwtService.sign({email: user.email, password: user.password})
     return {
       user: req.user,
