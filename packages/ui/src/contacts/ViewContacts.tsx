@@ -67,7 +67,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      const contacts = (await httpClient.contacts.list(token)).data;
+      const contacts = (await httpClient.contacts.list()).data;
       setState({
         loading: false,
         contacts,

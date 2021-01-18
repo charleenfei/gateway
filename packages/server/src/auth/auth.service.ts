@@ -4,13 +4,11 @@ import { promisify } from 'util';
 import * as speakeasy from 'speakeasy';
 import { User } from '@centrifuge/gateway-lib/models/user';
 import { DatabaseService } from '../database/database.service';
-import { JwtService } from  '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
       private readonly database: DatabaseService,
-      private readonly jwtService: JwtService
   ) {}
 
   /**

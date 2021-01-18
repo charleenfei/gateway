@@ -59,7 +59,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     contacts: [],
   });
 
-  const { user, token } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const notification = useContext(NotificationContext);
 
   const displayPageError = useCallback(
@@ -77,7 +77,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
       loadingMessage: 'Loading',
     });
     try {
-      const contacts = (await httpClient.contacts.list(token)).data;
+      const contacts = (await httpClient.contacts.list()).data;
       const schemas = (await httpClient.schemas.list()).data;
       const document = (await httpClient.documents.getById(id)).data;
       setState({

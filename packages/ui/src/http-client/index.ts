@@ -35,22 +35,10 @@ export const httpClient = {
 
   },
   contacts: {
-    create: async (contact: Contact, token: string | null) => instance.post(ROUTES.CONTACTS, contact, {
-      headers: {
-        Authorization: "jwt "+ token
-      }
-    }),
-    list: async (token: string | null) => instance.get(ROUTES.CONTACTS, {
-      headers: {
-        Authorization: "jwt "+ token
-      }
-    }),
+    create: async (contact: Contact, token: string | null) => instance.post(ROUTES.CONTACTS, contact),
+    list: async () => instance.get(ROUTES.CONTACTS),
     update: async (contact: Contact, token: string | null ) =>
-      instance.put(`${ROUTES.CONTACTS}/${contact._id}`, contact, {
-        headers: {
-          Authorization: "jwt "+ token
-        }
-      }),
+      instance.put(`${ROUTES.CONTACTS}/${contact._id}`, contact),
   },
   funding: {
     create: async (fundingRequest: FundingRequest) => instance.post(ROUTES.FUNDING.base, fundingRequest),

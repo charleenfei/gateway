@@ -24,7 +24,7 @@ import { UserAuthGuard } from '../auth/admin.auth.guard';
 import { isPasswordValid } from '@centrifuge/gateway-lib/utils/validators';
 import { Organization } from '@centrifuge/gateway-lib/models/organization';
 import { MailerService } from '@nestjs-modules/mailer';
-import {JwtService} from "@nestjs/jwt";
+import {JwtService} from '@nestjs/jwt';
 
 @Controller()
 export class UsersController {
@@ -37,7 +37,7 @@ export class UsersController {
 
   @Post(ROUTES.USERS.loginTentative)
   @HttpCode(200)
-  async loginTentative(@Request() req): Promise<User> {
+  async loginTentative(@Request() req) {
     let { user } = req;
     if(user.twoFAType !== TwoFaType.APP) {
       if (!user.secret) {
@@ -69,12 +69,16 @@ export class UsersController {
         console.log(e);
       }
     }
-    return user;
+    const accessToken = this.jwtService.sign({email: user.email, password: user.password})
+    return {
+      user,
+      token: accessToken
+    };
   }
 
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
-  async login(@Body() user: User, @Request() req){
+  async login(@Body() user: User, @Request() req) {
     const accessToken = this.jwtService.sign({email: user.email, password: user.password})
     return {
       user: req.user,

@@ -53,7 +53,7 @@ export const CreateDocument: FunctionComponent<Props> = props => {
   } = props;
 
   const notification = useContext(NotificationContext);
-  const { user, token } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   const displayPageError = useCallback(
     error => {
@@ -67,7 +67,7 @@ export const CreateDocument: FunctionComponent<Props> = props => {
   const loadData = useCallback(async () => {
     setState({});
     try {
-      const contacts = (await httpClient.contacts.list(token)).data;
+      const contacts = (await httpClient.contacts.list()).data;
       const schemas = (
         await httpClient.schemas.list({
           archived: { $exists: false, $ne: true },

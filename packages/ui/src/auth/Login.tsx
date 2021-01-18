@@ -28,7 +28,7 @@ const LoginPage: FunctionComponent<Props> = props => {
 
   const loginTentative = async (loginCandidate: User) => {
     try {
-      const result = (await httpClient.user.loginTentative(loginCandidate)).data;
+      const result = (await httpClient.user.loginTentative(loginCandidate)).data.user;
       setLoginCandidate({
         ...result,
         ...loginCandidate

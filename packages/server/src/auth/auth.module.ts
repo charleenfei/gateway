@@ -16,7 +16,6 @@ import config from '../config';
     DatabaseModule,
     JwtModule.register({
       secret: config.jwtSecret,
-      // TODO: how long?
       signOptions: { expiresIn: '1h' }
     })
   ],
