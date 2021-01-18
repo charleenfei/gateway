@@ -35,9 +35,9 @@ export const httpClient = {
 
   },
   contacts: {
-    create: async (contact: Contact, token: string | null) => instance.post(ROUTES.CONTACTS, contact),
+    create: async (contact: Contact) => instance.post(ROUTES.CONTACTS, contact),
     list: async () => instance.get(ROUTES.CONTACTS),
-    update: async (contact: Contact, token: string | null ) =>
+    update: async (contact: Contact) =>
       instance.put(`${ROUTES.CONTACTS}/${contact._id}`, contact),
   },
   funding: {
