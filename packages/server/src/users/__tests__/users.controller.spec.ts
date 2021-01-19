@@ -10,6 +10,8 @@ import { centrifugeServiceProvider } from '../../centrifuge-client/centrifuge.mo
 import { testingHelpers } from '../../mocks/centrifuge-client.mock';
 import { MailerService } from '@nestjs-modules/mailer';
 import { MailerServiceMock } from '../../mocks/mailer-service.mock';
+import { JwtService } from '@nestjs/jwt';
+import {JwtServiceMock} from '../../mocks/jwt-service.mock';
 
 describe('Users controller', () => {
   let invitedUser: User;
@@ -23,6 +25,10 @@ describe('Users controller', () => {
         SessionGuard,
         centrifugeServiceProvider,
         databaseServiceProvider,
+        {
+          provide: JwtService,
+          useValue: new JwtServiceMock(),
+        },
         {
           provide: MailerService,
           useValue: new MailerServiceMock(),
