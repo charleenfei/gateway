@@ -55,8 +55,8 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
     },
   } = props;
 
-  const [user, setUser] = useState(loggedInUser!.user);
-  const [token, setToken] = useState(loggedInUser!.token);
+  const [user, setUser] = useState(loggedInUser ? loggedInUser.user : null);
+  const [token, setToken] = useState(loggedInUser ? loggedInUser.token : null);
 
   let menuItems: MenuItem[] = [];
   let routeItems: RouteItem[] = [];
