@@ -69,17 +69,21 @@ export class UsersController {
         console.log(e);
       }
     }
-    const accessToken = this.jwtService.sign({email: user.email, password: user.password})
-    return {
-      user,
-      token: accessToken
-    };
+
+    return user ;
   }
 
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
   async login(@Body() user: User, @Request() req) : Promise<LoggedInUser> {
-    const accessToken = this.jwtService.sign({email: user.email, password: user.password})
+
+    const poolIds = await Promise.all(req.user.schemas.map(async (schema) => {
+      const s = await this.databaseService.schemas.findOne({name: schema})
+      // TODO: after migration, introduce check if poolId is ETH address format
+      return s.registries[0].tinlakePoolsMetadata?.poolId
+    }))
+
+    const accessToken = this.jwtService.sign({email: user.email, poolIds})
     return {
       user: req.user,
       token: accessToken
