@@ -63,9 +63,17 @@ export class DocumentsController {
       );
     }
 
+    console.log(
+      `will commit document with document_id ${document.header.document_id}, version_id ${document.header.version_id} and _id ${document._id}`,
+    );
+
     const commitResult = await this.centrifugeService.documents.commitDocumentV2(
       user.account,
       document.header.document_id,
+    );
+
+    console.log(
+      `committed document with document_id ${commitResult.header.document_id}, version_id ${commitResult.header.version_id}`,
     );
 
     const updated = await this.centrifugeService.pullForJobComplete(
@@ -73,8 +81,11 @@ export class DocumentsController {
       user.account,
     );
 
-    await this.databaseService.documents.update(
-      { 'header.document_id': document.header.document_id },
+    const updatedDocs = await this.databaseService.documents.update(
+      {
+        'header.document_id': document.header.document_id,
+        organizationId: user.account.toLowerCase(),
+      },
       {
         $set: {
           document_status:
@@ -85,8 +96,12 @@ export class DocumentsController {
       },
       {
         multi: true,
+        returnUpdatedDocs: true,
       },
     );
+
+    console.log(`after commit updated docs`, updatedDocs);
+
     return commitResult;
   }
   /*
@@ -120,8 +135,15 @@ export class DocumentsController {
       payload,
     );
 
-    return (await this.databaseService.documents.update(
-      { 'header.document_id': createResult.header.document_id },
+    console.log(
+      `created/updated document with document_id ${createResult.header.document_id}, version_id ${createResult.header.version_id} and _id ${createResult._id}, will insert into database`,
+    );
+
+    const updated = (await this.databaseService.documents.update(
+      {
+        'header.document_id': createResult.header.document_id,
+        organizationId: user.account.toLowerCase(),
+      },
       {
         ...createResult,
         attributes: unflatten(createResult.attributes),
@@ -139,6 +161,10 @@ export class DocumentsController {
         upsert: true,
       },
     )) as Document;
+
+    console.log(`updated document`, updated);
+
+    return updated;
   }
 
   async cloneDoc(document: Document, template, user: User) {
@@ -150,6 +176,10 @@ export class DocumentsController {
       template,
     );
 
+    console.log(
+      `cloned document with new document_id ${cloneResult.header.document_id}, version_id ${cloneResult.header.version_id} and _id ${cloneResult._id} from template ${template} from document_id ${document.header.document_id}, version_id ${document.header.version_id} and _id ${document._id}, will insert into database`,
+    );
+
     /*
      * We add the document attributes in the database on clone even if the doc
      * does not have this on the node for a better UX.
@@ -158,13 +188,17 @@ export class DocumentsController {
      * TODO this should be removed when we do not require a commit before each update
      * */
     const mergedDoc: Document = merge(cloneResult, document);
-    return await this.databaseService.documents.insert({
+    const inserted = await this.databaseService.documents.insert({
       ...mergedDoc,
       ownerId: user._id,
       document_status: DocumentStatus.Creating,
       nft_status: NftStatus.NoNft,
       organizationId: user.account.toLowerCase(),
     });
+
+    console.log(`inserted document`, inserted);
+
+    return inserted;
   }
 
   @Post()
@@ -253,7 +287,7 @@ export class DocumentsController {
     try {
       const docFromNode = await this.centrifugeService.documents.getDocument(
         request.user.account,
-        document.header.document_id
+        document.header.document_id,
       );
 
       docFromNode.attributes = {
@@ -265,7 +299,10 @@ export class DocumentsController {
        * and it can happen that the webhook is not called
        * */
       const docs: any = await this.databaseService.documents.update(
-        { 'header.document_id': docFromNode.header.document_id },
+        {
+          'header.document_id': docFromNode.header.document_id,
+          organizationId: request.user.account.toLowerCase(),
+        },
         {
           $set: {
             attributes: docFromNode.attributes,

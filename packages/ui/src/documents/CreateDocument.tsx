@@ -110,55 +110,31 @@ export const CreateDocument: FunctionComponent<Props> = props => {
       }
       push(documentRoutes.index);
 
-      if (document.template && document.template !== '') {
-        /*
-        * When a document has a template if we update template rules are lost
-        * A temp workaround is to commit and create a new version.
-        * The extra commit is necessary because you can create a new version
-        * only for committed docs.
-        * TODO this should be changed
-        * */
-        await httpClient.documents.commit(createResult._id!)
-        await httpClient.documents.create({
-          ...document,
-          document_id: createResult?.header!.document_id,
-          attributes: {
-            ...document.attributes,
-            [HARDCODED_FIELDS.ASSET_IDENTIFIER]: {
-              type: 'bytes',
-              value: createResult.header!.document_id,
-            } as any
-          }
-        });
-      } else {
-        /*
-        * Update v2 replaces the entire document we make sure we do not lose
-        * any fields when adding the ASSET_IDENTIFIER
-        * */
-        const toUpdate = {
-          ...createResult,
-          attributes: {
-            ...createResult.attributes,
-            [HARDCODED_FIELDS.ASSET_IDENTIFIER]: {
-              type: 'bytes',
-              value: createResult.header!.document_id,
-            } as any,
-          }
+      await httpClient.documents.commit(createResult._id!);
 
-        };
-        await httpClient.documents.update(toUpdate)
-      }
+      const result = await httpClient.documents.create({
+        document_id: createResult.header!.document_id,
+        header: createResult.header,
+        attributes: {
+          ...createResult.attributes,
+          [HARDCODED_FIELDS.ASSET_IDENTIFIER]: {
+            type: 'bytes',
+            value: createResult.header!.document_id,
+          } as any,
+        },
+        template: createResult.template,
+      });
 
-
-
+      await httpClient.documents.commit(result.data._id!);
     } catch (e) {
+      console.error(e);
+
       notification.alert({
         type: NOTIFICATION.ERROR,
         title: 'Failed to save document',
         message: (e as AxiosError)!.response?.data.message,
       });
     }
-    createResult && (await httpClient.documents.commit(createResult._id!));
   };
 
   const onCancel = () => {
