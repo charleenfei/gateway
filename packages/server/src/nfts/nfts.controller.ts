@@ -16,10 +16,10 @@ import {
 } from '@centrifuge/gateway-lib/models/document';
 import { MintNftRequest } from '@centrifuge/gateway-lib/models/nfts';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
-import { SessionGuard } from '../auth/SessionGuard';
+import { SessionAuthGuard } from '../auth/session-auth.guard';
 
 @Controller(ROUTES.NFTS)
-@UseGuards(SessionGuard)
+@UseGuards(SessionAuthGuard)
 export class NftsController {
   constructor(
     private readonly databaseService: DatabaseService,

@@ -24,7 +24,7 @@ import {
   NftStatus,
 } from '@centrifuge/gateway-lib/models/document';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
-import { SessionGuard } from '../auth/SessionGuard';
+import { SessionAuthGuard } from '../auth/session-auth.guard';
 import { unflatten } from '@centrifuge/gateway-lib/utils/custom-attributes';
 import { merge } from 'lodash';
 import { User } from '@centrifuge/gateway-lib/models/user';
@@ -37,7 +37,7 @@ export class CommitResp {
 }
 
 @Controller(ROUTES.DOCUMENTS)
-@UseGuards(SessionGuard)
+@UseGuards(SessionAuthGuard)
 export class DocumentsController {
   constructor(
     private readonly databaseService: DatabaseService,

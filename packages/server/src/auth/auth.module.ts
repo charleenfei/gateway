@@ -4,10 +4,10 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { CookieSerializer } from './cookie-serializer';
 import { DatabaseModule } from '../database/database.module';
-import {UserAuthGuard} from './admin.auth.guard';
+import { UserManagerAuthGuard } from './user-manager-auth.guard';
 import { TwoFAStrategy } from './2fa.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import {JwtStrategy} from './jwt.strategy';
+import { JwtStrategy } from './jwt.strategy';
 import config from '../config';
 
 @Module({
@@ -16,15 +16,15 @@ import config from '../config';
     DatabaseModule,
     JwtModule.register({
       secret: config.jwtSecret,
-      signOptions: { expiresIn: '1h' }
-    })
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
   providers: [
     AuthService,
     JwtStrategy,
     LocalStrategy,
     TwoFAStrategy,
-    UserAuthGuard,
+    UserManagerAuthGuard,
     CookieSerializer,
   ],
 })

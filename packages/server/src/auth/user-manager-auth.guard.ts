@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { PERMISSIONS } from '@centrifuge/gateway-lib/utils/constants';
 
 @Injectable()
-export class UserAuthGuard implements CanActivate {
+export class UserManagerAuthGuard implements CanActivate {
   canActivate(
-      context: ExecutionContext,
+    context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     return this.validateRequest(request);
