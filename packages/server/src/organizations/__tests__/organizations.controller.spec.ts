@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
 import { OrganizationsController } from '../organizations.controller';
-import { SessionGuard } from '../../auth/SessionGuard';
+import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { databaseServiceProvider } from '../../database/database.providers';
 import { DatabaseService } from '../../database/database.service';
 import { Organization } from '@centrifuge/gateway-lib/models/organization';
@@ -29,7 +29,7 @@ describe('OrganizationController', () => {
   beforeEach(async () => {
     organizationsModule = await Test.createTestingModule({
       controllers: [OrganizationsController],
-      providers: [SessionGuard, databaseServiceProvider],
+      providers: [SessionAuthGuard, databaseServiceProvider],
     }).compile();
 
     const databaseService = organizationsModule.get<DatabaseService>(

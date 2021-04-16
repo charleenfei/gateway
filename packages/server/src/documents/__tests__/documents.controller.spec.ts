@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Document } from '../../../../lib/models/document';
-import { SessionGuard } from '../../auth/SessionGuard';
+import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { databaseServiceProvider } from '../../database/database.providers';
 import { DatabaseService } from '../../database/database.service';
 import { DocumentsController } from '../documents.controller';
@@ -67,7 +67,7 @@ describe('DocumentsController', () => {
     documentsModule = await Test.createTestingModule({
       controllers: [DocumentsController],
       providers: [
-        SessionGuard,
+        SessionAuthGuard,
         centrifugeServiceProvider,
         databaseServiceProvider,
       ],
