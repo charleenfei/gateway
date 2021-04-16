@@ -15,8 +15,8 @@ import config from '../config';
     PassportModule.register({}),
     DatabaseModule,
     JwtModule.register({
-      secret: config.jwtSecret,
-      signOptions: { expiresIn: '1h' },
+      secret: config.jwtPubKey,
+      signOptions: { expiresIn: '1h' }, // TODO discuss
     }),
   ],
   providers: [

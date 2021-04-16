@@ -31,6 +31,8 @@ import { isPasswordValid } from '@centrifuge/gateway-lib/utils/validators';
 import { Organization } from '@centrifuge/gateway-lib/models/organization';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JWTPayload } from '../auth/jwt-payload.interface';
 
 @Controller()
 export class UsersController {
@@ -90,11 +92,24 @@ export class UsersController {
       }),
     );
 
-    const accessToken = this.jwtService.sign({ email: user.email, poolIds });
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.email,
+        poolIds,
+      } as JWTPayload,
+      { algorithm: 'RS256', secret: config.jwtPrivKey },
+    );
     return {
       user: req.user,
       token: accessToken,
     };
+  }
+
+  @Get('/api/users/profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(@Request() req): Promise<User> {
+    let { user } = req;
+    return { user } as any;
   }
 
   @Get(ROUTES.USERS.logout)
