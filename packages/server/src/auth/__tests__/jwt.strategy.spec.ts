@@ -78,7 +78,7 @@ describe('JWTStrategy', () => {
         algorithms: ['RS256'],
         secret: config.jwtPubKey + 'a',
       }),
-    ).rejects.toContain('routines:get_header_and_data:bad');
+    ).rejects.toThrow();
 
     const result = await jwtService.verifyAsync(token, {
       algorithms: ['RS256'],
