@@ -8,10 +8,10 @@ import {
   UserapiFundingResponse,
 } from '@centrifuge/gateway-lib/centrifuge-node-client';
 import { FundingSignatureRequest } from '@centrifuge/gateway-lib/models/funding-request';
-import { SessionAuthGuard } from '../auth/session-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller()
-@UseGuards(SessionAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class FundingController {
   constructor(
     private readonly databaseService: DatabaseService,

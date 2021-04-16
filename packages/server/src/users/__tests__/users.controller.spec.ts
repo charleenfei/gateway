@@ -3,7 +3,6 @@ import { databaseServiceProvider } from '../../database/database.providers';
 import { User, UserWithOrg } from '../../../../lib/models/user';
 import config from '../../config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { DatabaseService } from '../../database/database.service';
 import { PERMISSIONS } from '../../../../lib/utils/constants';
 import { centrifugeServiceProvider } from '../../centrifuge-client/centrifuge.module';
@@ -12,6 +11,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { MailerServiceMock } from '../../mocks/mailer-service.mock';
 import { JwtService } from '@nestjs/jwt';
 import { JwtServiceMock } from '../../mocks/jwt-service.mock';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 describe('Users controller', () => {
   let invitedUser: User;
@@ -22,7 +22,7 @@ describe('Users controller', () => {
     userModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [
-        SessionAuthGuard,
+        JwtAuthGuard,
         centrifugeServiceProvider,
         databaseServiceProvider,
         {

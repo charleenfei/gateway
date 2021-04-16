@@ -10,13 +10,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { SessionAuthGuard } from '../auth/session-auth.guard';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
 import { DatabaseService } from '../database/database.service';
 import { Schema } from '@centrifuge/gateway-lib/models/schema';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller(ROUTES.SCHEMAS)
-@UseGuards(SessionAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class SchemasController {
   constructor(private readonly databaseService: DatabaseService) {}
 

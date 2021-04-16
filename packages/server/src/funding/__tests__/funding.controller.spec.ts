@@ -1,9 +1,9 @@
 import { FundingController } from '../funding.controller';
 import { databaseServiceProvider } from '../../database/database.providers';
 import { Test, TestingModule } from '@nestjs/testing';
-import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { DatabaseService } from '../../database/database.service';
 import { centrifugeServiceProvider } from '../../centrifuge-client/centrifuge.module';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 describe('Funding controller', () => {
   const invoice: any = {
@@ -22,7 +22,7 @@ describe('Funding controller', () => {
     fundingModule = await Test.createTestingModule({
       controllers: [FundingController],
       providers: [
-        SessionAuthGuard,
+        JwtAuthGuard,
         centrifugeServiceProvider,
         databaseServiceProvider,
       ],

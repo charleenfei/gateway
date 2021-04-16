@@ -9,13 +9,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { SessionAuthGuard } from '../auth/session-auth.guard';
 import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
 import { DatabaseService } from '../database/database.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller(ROUTES.CONTACTS)
-@UseGuards(SessionAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ContactsController {
   constructor(private readonly databaseService: DatabaseService) {}
 

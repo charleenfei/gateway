@@ -7,10 +7,10 @@ import {
   RegistriesErrors,
   Schema,
 } from '../../../../lib/models/schema';
-import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { databaseServiceProvider } from '../../database/database.providers';
 import { DatabaseService } from '../../database/database.service';
 import { SchemasController } from '../schemas.controllers';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 const delay = require('util').promisify(setTimeout);
 
@@ -63,7 +63,7 @@ describe('SchemasController', () => {
 
     schemaModule = await Test.createTestingModule({
       controllers: [SchemasController],
-      providers: [SessionAuthGuard, databaseServiceProvider],
+      providers: [JwtAuthGuard, databaseServiceProvider],
     }).compile();
 
     const databaseService = schemaModule.get<DatabaseService>(DatabaseService);

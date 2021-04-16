@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
 import { ContactsController } from '../contacts.controller';
 import { Contact } from '../../../../lib/models/contact';
-import { SessionAuthGuard } from '../../auth/session-auth.guard';
 import { databaseServiceProvider } from '../../database/database.providers';
 import { DatabaseService } from '../../database/database.service';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 const delay = require('util').promisify(setTimeout);
 
@@ -34,7 +34,7 @@ describe('ContactsController', () => {
   beforeEach(async () => {
     contactsModule = await Test.createTestingModule({
       controllers: [ContactsController],
-      providers: [SessionAuthGuard, databaseServiceProvider],
+      providers: [JwtAuthGuard, databaseServiceProvider],
     }).compile();
 
     const databaseService = contactsModule.get<DatabaseService>(
