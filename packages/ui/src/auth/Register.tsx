@@ -10,6 +10,7 @@ import TwoFAForm from './TwoFAForm';
 import { AppContext } from '../App';
 import routes from '../routes';
 import { Box } from 'grommet';
+import { goToHomePage } from '../utils/goToHomePage';
 type Props = {
   register: (user: User) => void;
   isRegistering: boolean;
@@ -27,10 +28,6 @@ const Register: FunctionComponent<Props> = (props: Props) => {
   const [user, setUser] = useState<User>();
   const [error, setError] = useState<Error>();
   const loggedInUser = useContext(AppContext).user;
-
-  const goToHomePage = () => {
-    window.location.href = routes.index;
-  };
 
   const login = async (loginCandidate: User) => {
     try {

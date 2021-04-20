@@ -112,13 +112,8 @@ export class UsersController {
     return { user } as any;
   }
 
-  @Get(ROUTES.USERS.logout)
-  async logout(@Request() req, @Response() res) {
-    req.logout();
-    return res.redirect('/');
-  }
-
   @Get(ROUTES.USERS.base)
+  @UseGuards(JwtAuthGuard)
   @UseGuards(UserManagerAuthGuard)
   async getAllUsers(@Request() request) {
     return await this.databaseService.users
@@ -151,7 +146,7 @@ export class UsersController {
           false,
         );
       } else {
-        throw new MethodNotAllowedException('Email taken!');
+        throw new MethodNotAllowedException('Pending invite required!');
       }
     } else {
       if (existingUser) {
@@ -170,6 +165,7 @@ export class UsersController {
   }
 
   @Post(ROUTES.USERS.invite)
+  @UseGuards(JwtAuthGuard)
   @UseGuards(UserManagerAuthGuard)
   async invite(@Body() user: Partial<User>) {
     if (!config.inviteOnly) {
@@ -220,6 +216,7 @@ export class UsersController {
   }
 
   @Put(ROUTES.USERS.base)
+  @UseGuards(JwtAuthGuard)
   @UseGuards(UserManagerAuthGuard)
   async update(@Body() user): Promise<User> {
     const otherUserWithEmail: User = await this.databaseService.users.findOne({
@@ -237,6 +234,7 @@ export class UsersController {
   }
 
   @Delete(`${ROUTES.USERS.base}/:id`)
+  @UseGuards(JwtAuthGuard)
   @UseGuards(UserManagerAuthGuard)
   async remove(@Param() params): Promise<number> {
     return await this.databaseService.users.remove({

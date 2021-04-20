@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useCallback, useContext, useEffect } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import ContactList from './ContactList';
 import { Preloader } from '../components/Preloader';
@@ -6,44 +11,44 @@ import { httpClient } from '../http-client';
 import { AppContext } from '../App';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
+import { goToHomePage } from '../utils/goToHomePage';
 
-type State  = {
-  loading: boolean,
-  error: any,
-  contacts: Contact[]
-}
+type State = {
+  loading: boolean;
+  error: any;
+  contacts: Contact[];
+};
 
 const ViewContacts: FunctionComponent = () => {
-
-  const [
-    {
-      loading,
-      contacts,
-      error,
-    },
-    setState] = useMergeState<State>({
+  const [{ loading, contacts, error }, setState] = useMergeState<State>({
     loading: true,
     error: null,
     contacts: [],
   });
 
+  const { user, token } = useContext(AppContext);
 
-  const { user } = useContext(AppContext);
+  const displayPageError = useCallback(
+    error => {
+      setState({
+        loading: false,
+        error,
+        contacts: [],
+      });
+    },
+    [setState],
+  );
 
-  const displayPageError = useCallback((error) => {
-    setState({
-      loading: false,
-      error,
-      contacts: [],
-    });
-  }, [setState]);
+  if (!token) {
+    goToHomePage();
+  }
 
   const createContact = async (contact: Contact) => {
     setState({
       loading: true,
     });
     try {
-      await httpClient.contacts.create(contact);
+      await httpClient.contacts.create(contact, token!);
       await loadContacts();
     } catch (e) {
       displayPageError(e);
@@ -55,7 +60,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      await httpClient.contacts.update(contact);
+      await httpClient.contacts.update(contact, token!);
       await loadContacts();
     } catch (e) {
       displayPageError(e);
@@ -67,7 +72,7 @@ const ViewContacts: FunctionComponent = () => {
       loading: true,
     });
     try {
-      const contacts = (await httpClient.contacts.list()).data;
+      const contacts = (await httpClient.contacts.list(token!)).data;
       setState({
         loading: false,
         contacts,
@@ -81,12 +86,11 @@ const ViewContacts: FunctionComponent = () => {
     loadContacts();
   }, [setState, loadContacts]);
 
-
   if (loading) {
-    return <Preloader message="Loading"/>;
+    return <Preloader message="Loading" />;
   }
 
-  if (error) return <PageError error={error}/>;
+  if (error) return <PageError error={error} />;
 
   return (
     <ContactList
@@ -96,8 +100,6 @@ const ViewContacts: FunctionComponent = () => {
       updateContact={updateContact}
     />
   );
-
 };
-
 
 export default ViewContacts;

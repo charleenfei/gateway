@@ -32,6 +32,7 @@ import { AxiosError } from 'axios';
 import { FundingAgreements } from './FundingAgreements';
 import { Nfts } from './Nfts';
 import { extendContactsWithUsers } from '@centrifuge/gateway-lib/models/contact';
+import { goToHomePage } from '../utils/goToHomePage';
 
 type Props = RouteComponentProps<{ id: string }>;
 
@@ -59,7 +60,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     contacts: [],
   });
 
-  const { user } = useContext(AppContext);
+  const { user, token } = useContext(AppContext);
   const notification = useContext(NotificationContext);
 
   const displayPageError = useCallback(
@@ -77,9 +78,9 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
       loadingMessage: 'Loading',
     });
     try {
-      const contacts = (await httpClient.contacts.list()).data;
-      const schemas = (await httpClient.schemas.list()).data;
-      const document = (await httpClient.documents.getById(id)).data;
+      const contacts = (await httpClient.contacts.list(token!)).data;
+      const schemas = (await httpClient.schemas.list(undefined, token!)).data;
+      const document = (await httpClient.documents.getById(id, token!)).data;
       setState({
         loadingMessage: null,
         contacts,
@@ -102,11 +103,11 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     });
     try {
       /*
-      * We need to create a new version when updating a doc.
-      * TODO this might need to change if we do not auto commit anymore
-      * */
-      newDoc.document_id = newDoc!.header!.document_id
-      document = (await httpClient.documents.create(newDoc)).data;
+       * We need to create a new version when updating a doc.
+       * TODO this might need to change if we do not auto commit anymore
+       * */
+      newDoc.document_id = newDoc!.header!.document_id;
+      document = (await httpClient.documents.create(newDoc, token!)).data;
       setState({
         loadingMessage: null,
         document,
@@ -117,7 +118,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     }
 
     try {
-      await httpClient.documents.commit(document._id!)
+      await httpClient.documents.commit(document._id!, token!);
     } catch (e) {
       displayModalError(e, 'Failed to commit document');
     }
@@ -145,6 +146,10 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
   const onCancel = () => {
     props.history.goBack();
   };
+
+  if (!token) {
+    goToHomePage();
+  }
 
   if (loadingMessage) return <Preloader message={loadingMessage} />;
   if (error) return <PageError error={error} />;

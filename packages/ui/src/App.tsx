@@ -30,11 +30,15 @@ interface AppPros extends RouteComponentProps {
 interface AppContextData {
   user: User | null;
   setUser: (user: User) => void;
+  token: string | null;
+  setToken: (token: string) => void;
 }
 
 export const AppContext = React.createContext<AppContextData>({
   user: null,
   setUser: () => undefined,
+  token: null,
+  setToken: () => undefined,
 });
 
 const App: FunctionComponent<AppPros> = (props: AppPros) => {

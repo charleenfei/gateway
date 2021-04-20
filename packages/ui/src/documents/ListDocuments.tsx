@@ -11,7 +11,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import {
   Document,
   canLoadDocument,
-  documentHasNFTs
+  documentHasNFTs,
 } from '@centrifuge/gateway-lib/models/document';
 import { SecondaryHeader } from '../components/SecondaryHeader';
 import { canCreateDocuments } from '@centrifuge/gateway-lib/models/user';
@@ -27,6 +27,7 @@ import { getSchemaLabel } from '@centrifuge/gateway-lib/utils/schema-utils';
 import { FormNext } from 'grommet-icons';
 import { POLLING_INTERVAL } from '../constants';
 import { hexToInt } from '@centrifuge/gateway-lib/utils/etherscan';
+import { goToHomePage } from '../utils/goToHomePage';
 
 type Props = RouteComponentProps;
 
@@ -54,7 +55,7 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
     error: null,
   });
 
-  const { user } = useContext(AppContext);
+  const { user, token } = useContext(AppContext);
 
   const displayPageError = useCallback(
     error => {
@@ -72,9 +73,9 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
         loadingMessage: inBg ? null : 'Loading',
       });
       try {
-        const documents = (await httpClient.documents.list()).data;
+        const documents = (await httpClient.documents.list(token!)).data;
         //get All schemas. We need to display even archived ones
-        const schemas = (await httpClient.schemas.list()).data;
+        const schemas = (await httpClient.schemas.list(undefined, token!)).data;
         setState({
           loadingMessage: null,
           schemas,
@@ -111,8 +112,12 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
     loadData();
     return () => {
       clearTimeout(timeoutRef);
-    }
+    };
   }, [loadData]);
+
+  if (!token) {
+    goToHomePage();
+  }
 
   if (loadingMessage) {
     return <Preloader message={loadingMessage} />;
@@ -172,11 +177,13 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
               header: 'NFT ID',
               sortable: true,
               render: datum => {
-                if(documentHasNFTs(datum)) {
-                    return datum.header.nfts.map(nft => hexToInt(nft.token_id)).join(', ')
+                if (documentHasNFTs(datum)) {
+                  return datum.header.nfts
+                    .map(nft => hexToInt(nft.token_id))
+                    .join(', ');
                 }
                 return datum.nft_status;
-              }
+              },
             },
             {
               header: '',
@@ -185,7 +192,13 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
               sortable: false,
               size: '36px',
               render: datum => {
-                return canLoadDocument(datum) ? <Box><FormNext /></Box> : <></>;
+                return canLoadDocument(datum) ? (
+                  <Box>
+                    <FormNext />
+                  </Box>
+                ) : (
+                  <></>
+                );
               },
             },
           ]}
