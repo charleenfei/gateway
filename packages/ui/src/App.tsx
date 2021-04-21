@@ -3,7 +3,7 @@ import { Anchor, Box, Image, Text } from 'grommet';
 import { AxisTheme } from '@centrifuge/axis-theme';
 import Routing, { RouteItem } from './Routing';
 import { MenuItem, NavBar } from '@centrifuge/axis-nav-bar';
-import { User } from '@centrifuge/gateway-lib/models/user';
+import { LoggedInUser, User } from '@centrifuge/gateway-lib/models/user';
 import { PERMISSIONS } from '@centrifuge/gateway-lib/utils/constants';
 import routes from './routes';
 
@@ -25,7 +25,7 @@ import { httpClient } from './http-client';
 import { useJWT } from './auth/useJWT';
 
 interface AppPros extends RouteComponentProps {
-  loggedInUser: User | null;
+  loggedInUser: LoggedInUser | null;
 }
 
 interface AppContextData {
@@ -50,7 +50,7 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
   } = props;
 
   const [userLoaded, setUserLoaded] = useState(!!loggedInUser);
-  const [user, setUser] = useState(loggedInUser || null);
+  const [user, setUser] = useState(loggedInUser?.user || null);
   const [token, setToken] = useJWT();
 
   useEffect(() => {

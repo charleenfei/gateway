@@ -78,7 +78,14 @@ const LoginPage: FunctionComponent<Props> = props => {
             onSubmit={login}
           />
         ) : (
-          <LoginForm error={error} onSubmit={loginTentative} />
+          <LoginForm
+            error={error}
+            onSubmit={
+              process.env.REACT_APP_DISABLE_2FA === 'true'
+                ? login
+                : loginTentative
+            }
+          />
         )}
       </Box>
     </Box>
