@@ -19,7 +19,11 @@ const LoginPage: FunctionComponent<Props> = props => {
 
   const login = async (loginCandidate: User) => {
     try {
-      const data = await httpClient.user.login(loginCandidate);
+      const data = await httpClient.user.login({
+        email: loginCandidate.email,
+        password: loginCandidate.password || '',
+        token: loginCandidate.token,
+      });
       setUser(data.data.user);
       setToken(data.data.token);
     } catch (e) {
@@ -29,8 +33,12 @@ const LoginPage: FunctionComponent<Props> = props => {
 
   const loginTentative = async (loginCandidate: User) => {
     try {
-      const result = (await httpClient.user.loginTentative(loginCandidate)).data
-        .user;
+      const result = (
+        await httpClient.user.loginTentative({
+          email: loginCandidate.email,
+          password: loginCandidate.password || '',
+        })
+      ).data.user;
       setLoginCandidate({
         ...result,
         ...loginCandidate,

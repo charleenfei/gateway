@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { LoggedInUser, User } from '@centrifuge/gateway-lib/models/user';
+import { User } from '@centrifuge/gateway-lib/models/user';
 import { useJWT } from './useJWT';
 import { httpClient } from '../http-client';
 
@@ -25,16 +25,28 @@ export const AuthContext = createContext<AuthContextData>({
 
 interface Props {
   children: (user: null | User, logout: () => void) => ReactNode;
-  loggedInUser: LoggedInUser | null;
 }
 
-export const Auth: FC<Props> = ({ loggedInUser, children }) => {
-  const [userLoaded, setUserLoaded] = useState(!!loggedInUser);
-  const [user, setUser] = useState(loggedInUser?.user || null);
+export const Auth: FC<Props> = ({ children }) => {
+  const [userLoaded, setUserLoaded] = useState(false);
+  const [user, setUser] = useState<null | User>(null);
   const [token, setToken] = useJWT();
 
   useEffect(() => {
     (async () => {
+      // if auto login should happen
+      if (!user && !token && process.env.REACT_APP_ADMIN_USER) {
+        const res = await httpClient.user.login({
+          email: process.env.REACT_APP_ADMIN_USER,
+          password: process.env.REACT_APP_ADMIN_PASSWORD || '',
+        });
+        setUser(res.data.user);
+        setToken(res.data.token);
+        setUserLoaded(true);
+        return;
+      }
+
+      // if already loaded or if no token exists
       if (user || !token) {
         setUserLoaded(true);
         return;

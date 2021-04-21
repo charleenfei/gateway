@@ -33,11 +33,11 @@ instance.interceptors.response.use(
 
 export const httpClient = {
   user: {
-    login: async (user: User) =>
+    login: async (user: { email: string; password: string; token?: string }) =>
       instance.post<LoggedInUser>(ROUTES.USERS.login, user),
     profile: async (token: string) =>
       instance.get<User>(ROUTES.USERS.profile, authHeader(token)),
-    loginTentative: async (user: User) =>
+    loginTentative: async (user: { email: string; password: string }) =>
       instance.post(ROUTES.USERS.loginTentative, user),
     register: async (user: User) => instance.post(ROUTES.USERS.base, user),
     invite: async (user: User, token: string) =>

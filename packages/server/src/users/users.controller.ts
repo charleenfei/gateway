@@ -83,7 +83,7 @@ export class UsersController {
 
   @Post(ROUTES.USERS.login)
   @HttpCode(200)
-  async login(@Body() user: User, @Request() req): Promise<LoggedInUser> {
+  async login(@Request() req): Promise<LoggedInUser> {
     const poolIds = await Promise.all(
       req.user.schemas.map(async schema => {
         const s = await this.databaseService.schemas.findOne({ name: schema });
@@ -94,7 +94,7 @@ export class UsersController {
 
     const accessToken = await this.jwtService.signAsync(
       {
-        sub: user.email,
+        sub: req.user.email,
         poolIds,
       } as JWTPayload,
       { algorithm: 'RS256', secret: config.jwtPrivKey },

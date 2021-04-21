@@ -30,7 +30,11 @@ const Register: FunctionComponent<Props> = (props: Props) => {
 
   const login = async (loginCandidate: User) => {
     try {
-      await httpClient.user.login(loginCandidate);
+      await httpClient.user.login({
+        email: loginCandidate.email,
+        password: loginCandidate.password || '',
+        token: loginCandidate.token,
+      });
       goToHomePage();
     } catch (e) {
       setError(e);

@@ -3,7 +3,7 @@ import { Anchor, Box, Image, Text } from 'grommet';
 import { AxisTheme } from '@centrifuge/axis-theme';
 import Routing, { RouteItem } from './Routing';
 import { MenuItem, NavBar } from '@centrifuge/axis-nav-bar';
-import { LoggedInUser, User } from '@centrifuge/gateway-lib/models/user';
+import { User } from '@centrifuge/gateway-lib/models/user';
 import { PERMISSIONS } from '@centrifuge/gateway-lib/utils/constants';
 import routes from './routes';
 import UsersList from './users/UsersList';
@@ -21,13 +21,10 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { theme } from './theme';
 import { Auth } from './auth/Auth';
 
-interface AppPros extends RouteComponentProps {
-  loggedInUser: LoggedInUser | null;
-}
-
-const App: FunctionComponent<AppPros> = (props: AppPros) => {
+const App: FunctionComponent<RouteComponentProps> = (
+  props: RouteComponentProps,
+) => {
   const {
-    loggedInUser,
     location: { pathname },
     history: { push },
   } = props;
@@ -35,7 +32,7 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
   return (
     <div className="App">
       <AxisTheme theme={theme} full={true}>
-        <Auth loggedInUser={loggedInUser}>
+        <Auth>
           {(user, logout) => {
             const [menuItems, routeItems] = menuAndRouteItems(user, logout);
             return (
