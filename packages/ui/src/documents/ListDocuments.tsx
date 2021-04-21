@@ -18,7 +18,7 @@ import { canCreateDocuments } from '@centrifuge/gateway-lib/models/user';
 import { Preloader } from '../components/Preloader';
 import { formatDate } from '@centrifuge/gateway-lib/utils/formaters';
 import { httpClient } from '../http-client';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
@@ -55,7 +55,7 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
     error: null,
   });
 
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
 
   const displayPageError = useCallback(
     error => {

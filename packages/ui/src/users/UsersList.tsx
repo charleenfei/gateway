@@ -26,7 +26,7 @@ import {
 import { AxiosError } from 'axios';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
 import { Organization } from '@centrifuge/gateway-lib/models/organization';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { goToHomePage } from '../utils/goToHomePage';
 
 type State = {
@@ -65,7 +65,7 @@ const UsersList: FunctionComponent = () => {
   });
 
   const notification = useContext(NotificationContext);
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
 
   const displayPageError = useCallback(
     error => {

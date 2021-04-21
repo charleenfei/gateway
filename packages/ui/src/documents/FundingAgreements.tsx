@@ -26,7 +26,7 @@ import {
   FundingRequest,
 } from '@centrifuge/gateway-lib/models/funding-request';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { goToHomePage } from '../utils/goToHomePage';
 
 type Props = {
@@ -71,7 +71,7 @@ export const FundingAgreements: FunctionComponent<Props> = props => {
     ...props,
   };
 
-  const { token } = useContext(AppContext);
+  const { token } = useContext(AuthContext);
 
   const createFundingAgreement = async (data: FundingAgreement) => {
     onAsyncStart('Creating Funding Agreement');

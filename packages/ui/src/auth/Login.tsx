@@ -5,7 +5,7 @@ import { Redirect, RouteComponentProps, withRouter } from 'react-router';
 import { TwoFaType, User } from '@centrifuge/gateway-lib/models/user';
 import routes from '../routes';
 import { PERMISSIONS } from '@centrifuge/gateway-lib/utils/constants';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { httpClient } from '../http-client';
 import TwoFAForm from './TwoFAForm';
 import { Box } from 'grommet';
@@ -15,7 +15,7 @@ type Props = {} & RouteComponentProps;
 const LoginPage: FunctionComponent<Props> = props => {
   const [error, setError] = useState<Error>();
   const [loginCandidate, setLoginCandidate] = useState<User>();
-  const { user, setUser, setToken } = useContext(AppContext);
+  const { user, setUser, setToken } = useContext(AuthContext);
 
   const login = async (loginCandidate: User) => {
     try {

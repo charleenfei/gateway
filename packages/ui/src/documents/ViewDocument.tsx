@@ -17,7 +17,7 @@ import {
 } from '@centrifuge/gateway-lib/models/contact';
 import { canWriteToDoc } from '@centrifuge/gateway-lib/models/user';
 import { httpClient } from '../http-client';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
 import { SecondaryHeader } from '../components/SecondaryHeader';
@@ -64,7 +64,7 @@ export const ViewDocument: FunctionComponent<Props> = (props: Props) => {
     history: { push },
   } = props;
 
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
   const notification = useContext(NotificationContext);
 
   const displayPageError = useCallback(

@@ -7,7 +7,7 @@ import { httpClient } from '../http-client';
 import { parse } from 'query-string';
 import QrCode from './QrCode';
 import TwoFAForm from './TwoFAForm';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { Box } from 'grommet';
 import { goToHomePage } from '../utils/goToHomePage';
 type Props = {
@@ -26,7 +26,7 @@ const Register: FunctionComponent<Props> = (props: Props) => {
 
   const [user, setUser] = useState<User>();
   const [error, setError] = useState<Error>();
-  const loggedInUser = useContext(AppContext).user;
+  const loggedInUser = useContext(AuthContext).user;
 
   const login = async (loginCandidate: User) => {
     try {

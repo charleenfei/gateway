@@ -20,7 +20,7 @@ import {
 import { PageError } from '../components/PageError';
 import { AxiosError } from 'axios';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { goToHomePage } from '../utils/goToHomePage';
 
 type State = {
@@ -100,7 +100,7 @@ const SchemaList: FunctionComponent = () => {
     error: null,
   });
 
-  const { token } = useContext(AppContext);
+  const { token } = useContext(AuthContext);
   const notification = useContext(NotificationContext);
 
   const displayPageError = useCallback(

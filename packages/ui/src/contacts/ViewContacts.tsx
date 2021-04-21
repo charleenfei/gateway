@@ -8,7 +8,7 @@ import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import ContactList from './ContactList';
 import { Preloader } from '../components/Preloader';
 import { httpClient } from '../http-client';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
 import { goToHomePage } from '../utils/goToHomePage';
@@ -26,7 +26,7 @@ const ViewContacts: FunctionComponent = () => {
     contacts: [],
   });
 
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
 
   const displayPageError = useCallback(
     error => {

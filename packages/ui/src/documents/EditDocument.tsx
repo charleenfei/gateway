@@ -20,7 +20,7 @@ import { SecondaryHeader } from '../components/SecondaryHeader';
 import { Schema } from '@centrifuge/gateway-lib/models/schema';
 import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import { httpClient } from '../http-client';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
 import documentRoutes from './routes';
@@ -60,7 +60,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     contacts: [],
   });
 
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
   const notification = useContext(NotificationContext);
 
   const displayPageError = useCallback(

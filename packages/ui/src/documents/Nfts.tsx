@@ -16,7 +16,7 @@ import MintNftForm, { MintNftFormData } from './MintNftForm';
 import { Contact } from '@centrifuge/gateway-lib/src/models/contact';
 import { CoreapiNFT } from '@centrifuge/gateway-lib/centrifuge-node-client';
 import { DataTableWithDynamicHeight } from '../components/DataTableWithDynamicHeight';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { goToHomePage } from '../utils/goToHomePage';
 
 type Props = {
@@ -57,7 +57,7 @@ export const Nfts: FunctionComponent<Props> = props => {
     ...props,
   };
 
-  const { token } = useContext(AppContext);
+  const { token } = useContext(AuthContext);
 
   const mintNFT = async (id: string, data: MintNftFormData) => {
     closeModal();

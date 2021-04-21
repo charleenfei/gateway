@@ -20,7 +20,7 @@ import {
   NOTIFICATION,
   NotificationContext,
 } from '../components/NotificationContext';
-import { AppContext } from '../App';
+import { AuthContext } from '../auth/Auth';
 import { useMergeState } from '../hooks';
 import { PageError } from '../components/PageError';
 import { AxiosError } from 'axios';
@@ -54,7 +54,7 @@ export const CreateDocument: FunctionComponent<Props> = props => {
   } = props;
 
   const notification = useContext(NotificationContext);
-  const { user, token } = useContext(AppContext);
+  const { user, token } = useContext(AuthContext);
 
   const displayPageError = useCallback(
     error => {
