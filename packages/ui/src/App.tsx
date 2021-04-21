@@ -133,8 +133,11 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
 
     menuItems.push({
       label: 'Log out',
-      route: routes.user.logout,
-      external: true,
+      route: '',
+      onClick: () => {
+        setToken(null);
+        setUser(null);
+      },
       secondary: true,
     });
   }
@@ -156,7 +159,9 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
                 menuLabel={user ? user.email : ''}
                 menuItems={menuItems.reverse()}
                 onRouteClick={item => {
-                  if (item.external) {
+                  if (item.onClick) {
+                    item.onClick();
+                  } else if (item.external) {
                     window.location.replace(item.route);
                   } else {
                     push(item.route);
