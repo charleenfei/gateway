@@ -15,7 +15,7 @@ import config from '../config';
     DatabaseModule,
     JwtModule.register({
       secret: config.jwtPubKey,
-      signOptions: { expiresIn: '1h' }, // TODO discuss
+      signOptions: { expiresIn: config.jwtExpiresIn },
     }),
   ],
   providers: [AuthService, JwtStrategy, LocalStrategy, TwoFAStrategy],

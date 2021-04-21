@@ -89,5 +89,6 @@ const config = {
     'https://mainnet.infura.io/v3/55b957b5c6be42c49e6d48cbb102bdd5',
   jwtPrivKey: env.JWT_PRIV_KEY || JWT_PRIV_KEY,
   jwtPubKey: env.JWT_PUB_KEY || JWT_PUB_KEY,
+  jwtExpiresIn: '8h',
 };
 export default config;
