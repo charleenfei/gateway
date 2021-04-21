@@ -113,7 +113,7 @@ const UsersList: FunctionComponent = () => {
     } catch (e) {
       displayPageError(e);
     }
-  }, [setState, displayPageError]);
+  }, [setState, displayPageError, token]);
 
   useEffect(() => {
     loadData();
@@ -188,7 +188,7 @@ const UsersList: FunctionComponent = () => {
         userFormOpened: false,
         loadingMessage: context.loadingMessage,
       });
-      await httpClient.user[context.method](user);
+      await httpClient.user[context.method](user, token!);
       await loadData();
     } catch (e) {
       notification.alert({

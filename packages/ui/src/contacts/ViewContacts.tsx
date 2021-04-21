@@ -80,7 +80,7 @@ const ViewContacts: FunctionComponent = () => {
     } catch (e) {
       displayPageError(e);
     }
-  }, [displayPageError, setState]);
+  }, [displayPageError, setState, token]);
 
   useEffect(() => {
     loadContacts();

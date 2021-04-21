@@ -15,12 +15,13 @@ type Props = {} & RouteComponentProps;
 const LoginPage: FunctionComponent<Props> = props => {
   const [error, setError] = useState<Error>();
   const [loginCandidate, setLoginCandidate] = useState<User>();
-  const { user, setUser } = useContext(AppContext);
+  const { user, setUser, setToken } = useContext(AppContext);
 
   const login = async (loginCandidate: User) => {
     try {
-      const user = await httpClient.user.login(loginCandidate);
-      setUser(user.data);
+      const data = await httpClient.user.login(loginCandidate);
+      setUser(data.data.user);
+      setToken(data.data.token);
     } catch (e) {
       setError(e);
     }

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Anchor, Box, Image, Text } from 'grommet';
 import { AxisTheme } from '@centrifuge/axis-theme';
 import Routing, { RouteItem } from './Routing';
@@ -21,10 +21,11 @@ import { DisplayField } from '@centrifuge/axis-display-field';
 import logo from './assets/logo.png';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { theme } from './theme';
-import { LoggedInUser } from '@centrifuge/gateway-lib/src/models/user';
+import { httpClient } from './http-client';
+import { useJWT } from './auth/useJWT';
 
 interface AppPros extends RouteComponentProps {
-  loggedInUser: LoggedInUser | null;
+  loggedInUser: User | null;
 }
 
 interface AppContextData {
@@ -48,8 +49,28 @@ const App: FunctionComponent<AppPros> = (props: AppPros) => {
     history: { push },
   } = props;
 
-  const [user, setUser] = useState(loggedInUser ? loggedInUser.user : null);
-  const [token, setToken] = useState(loggedInUser ? loggedInUser.token : null);
+  const [userLoaded, setUserLoaded] = useState(!!loggedInUser);
+  const [user, setUser] = useState(loggedInUser || null);
+  const [token, setToken] = useJWT();
+
+  useEffect(() => {
+    (async () => {
+      if (user || !token) {
+        setUserLoaded(true);
+        return;
+      }
+
+      try {
+        const res = await httpClient.user.profile(token);
+        setUser(res.data);
+      } catch (e) {
+        setToken(null);
+      }
+      setUserLoaded(true);
+    })();
+  }, [token, user, setUserLoaded, setUser, setToken]);
+
+  if (!userLoaded) return null;
 
   let menuItems: MenuItem[] = [];
   let routeItems: RouteItem[] = [];

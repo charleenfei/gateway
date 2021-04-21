@@ -109,12 +109,11 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async profile(@Request() req): Promise<User> {
     let { user } = req;
-    return { user } as any;
+    return user;
   }
 
   @Get(ROUTES.USERS.base)
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(UserManagerAuthGuard)
+  @UseGuards(JwtAuthGuard, UserManagerAuthGuard)
   async getAllUsers(@Request() request) {
     return await this.databaseService.users
       .getCursor({})
@@ -165,8 +164,7 @@ export class UsersController {
   }
 
   @Post(ROUTES.USERS.invite)
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(UserManagerAuthGuard)
+  @UseGuards(JwtAuthGuard, UserManagerAuthGuard)
   async invite(@Body() user: Partial<User>) {
     if (!config.inviteOnly) {
       throw new MethodNotAllowedException('Invite functionality not enabled!');
@@ -216,8 +214,7 @@ export class UsersController {
   }
 
   @Put(ROUTES.USERS.base)
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(UserManagerAuthGuard)
+  @UseGuards(JwtAuthGuard, UserManagerAuthGuard)
   async update(@Body() user): Promise<User> {
     const otherUserWithEmail: User = await this.databaseService.users.findOne({
       email: user.email.toLowerCase(),
@@ -234,8 +231,7 @@ export class UsersController {
   }
 
   @Delete(`${ROUTES.USERS.base}/:id`)
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(UserManagerAuthGuard)
+  @UseGuards(JwtAuthGuard, UserManagerAuthGuard)
   async remove(@Param() params): Promise<number> {
     return await this.databaseService.users.remove({
       _id: params.id,

@@ -17,7 +17,7 @@ export class UserManagerAuthGuard implements CanActivate {
    * @param request
    */
   async validateRequest(request) {
-    if (request.user.permissions.includes(PERMISSIONS.CAN_MANAGE_USERS)) {
+    if (request.user?.permissions?.includes(PERMISSIONS.CAN_MANAGE_USERS)) {
       return true;
     }
     return false;

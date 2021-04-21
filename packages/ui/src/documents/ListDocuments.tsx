@@ -89,7 +89,7 @@ export const ListDocuments: FunctionComponent<Props> = (props: Props) => {
         loadData(true);
       }, POLLING_INTERVAL);
     },
-    [setState, displayPageError],
+    [setState, displayPageError, token],
   );
 
   const getFilteredDocuments = () => {

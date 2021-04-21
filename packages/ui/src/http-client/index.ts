@@ -1,7 +1,7 @@
 import axios, { AxiosPromise } from 'axios';
 
 import { ROUTES } from '@centrifuge/gateway-lib/utils/constants';
-import { User } from '@centrifuge/gateway-lib/models/user';
+import { LoggedInUser, User } from '@centrifuge/gateway-lib/models/user';
 import { Contact } from '@centrifuge/gateway-lib/models/contact';
 import {
   FundingRequest,
@@ -33,7 +33,10 @@ instance.interceptors.response.use(
 
 export const httpClient = {
   user: {
-    login: async (user: User) => instance.post(ROUTES.USERS.login, user),
+    login: async (user: User) =>
+      instance.post<LoggedInUser>(ROUTES.USERS.login, user),
+    profile: async (token: string) =>
+      instance.get<User>(ROUTES.USERS.profile, authHeader(token)),
     loginTentative: async (user: User) =>
       instance.post(ROUTES.USERS.loginTentative, user),
     register: async (user: User) => instance.post(ROUTES.USERS.base, user),

@@ -90,7 +90,7 @@ export const EditDocument: FunctionComponent<Props> = (props: Props) => {
     } catch (e) {
       displayPageError(e);
     }
-  }, [id, setState, displayPageError]);
+  }, [id, setState, displayPageError, token]);
 
   useEffect(() => {
     loadData();

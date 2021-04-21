@@ -8,7 +8,6 @@ import { parse } from 'query-string';
 import QrCode from './QrCode';
 import TwoFAForm from './TwoFAForm';
 import { AppContext } from '../App';
-import routes from '../routes';
 import { Box } from 'grommet';
 import { goToHomePage } from '../utils/goToHomePage';
 type Props = {

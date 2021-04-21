@@ -1,8 +1,5 @@
 import { PERMISSIONS } from '../utils/constants';
-import {
-  Document,
-  DOCUMENT_ACCESS,
-} from './document';
+import { Document, DOCUMENT_ACCESS } from './document';
 import { FundingAgreement } from './funding-request';
 import { CoreapiNFT } from '../centrifuge-node-client';
 
@@ -41,7 +38,7 @@ export type TwoFASecret = {
 export type LoggedInUser = {
   user: User;
   token: string;
-}
+};
 
 export class User implements IUser {
   name: string = '';
@@ -69,9 +66,7 @@ export const canWriteToDoc = (
   doc?: Document,
 ): boolean => {
   if (!user || !doc) return false;
-  return (
-    accountHasDocAccess(user.account, DOCUMENT_ACCESS.WRITE, doc)
-  );
+  return accountHasDocAccess(user.account, DOCUMENT_ACCESS.WRITE, doc);
 };
 
 export const canReadDoc = (

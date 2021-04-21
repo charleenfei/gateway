@@ -11,19 +11,13 @@ import config from '../config';
 
 @Module({
   imports: [
-    PassportModule.register({}),
+    PassportModule.register({ session: false }),
     DatabaseModule,
     JwtModule.register({
       secret: config.jwtPubKey,
       signOptions: { expiresIn: '1h' }, // TODO discuss
     }),
   ],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    LocalStrategy,
-    TwoFAStrategy,
-    UserManagerAuthGuard,
-  ],
+  providers: [AuthService, JwtStrategy, LocalStrategy, TwoFAStrategy],
 })
 export class AuthModule {}

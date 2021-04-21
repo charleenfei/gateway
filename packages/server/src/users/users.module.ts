@@ -13,13 +13,14 @@ import { AuthModule } from '../auth/auth.module';
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {
     consumer
-      .apply(passport.authenticate('local'))
+      .apply(passport.authenticate('local', { session: false }))
       .forRoutes(`${ROUTES.USERS.loginTentative}`);
 
     consumer
       .apply(
         passport.authenticate(
           process.env.NODE_ENV === 'development' ? 'local' : '2fa',
+          { session: false },
         ),
       )
       .forRoutes(`${ROUTES.USERS.login}`);

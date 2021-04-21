@@ -84,7 +84,7 @@ export const CreateDocument: FunctionComponent<Props> = props => {
     } catch (e) {
       displayPageError(e);
     }
-  }, [setState, displayPageError]);
+  }, [setState, displayPageError, token]);
 
   useEffect(() => {
     loadData();

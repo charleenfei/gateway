@@ -127,7 +127,7 @@ const SchemaList: FunctionComponent = () => {
     } catch (e) {
       displayPageError(e);
     }
-  }, [setState, displayPageError]);
+  }, [setState, displayPageError, token]);
 
   useEffect(() => {
     loadData();
@@ -152,7 +152,7 @@ const SchemaList: FunctionComponent = () => {
     });
 
     try {
-      await httpClient.schemas[context.method](schema);
+      await httpClient.schemas[context.method](schema, token!);
       await loadData();
     } catch (e) {
       setState({
