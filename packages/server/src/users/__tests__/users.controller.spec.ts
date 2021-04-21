@@ -77,23 +77,6 @@ describe('Users controller', () => {
     });
   });
 
-  describe('logout', () => {
-    it('should call request logout', async () => {
-      const usersController = userModule.get<UsersController>(UsersController);
-
-      const request = {
-        logout: jest.fn(),
-      };
-
-      const response = {
-        redirect: jest.fn(),
-      };
-      await usersController.logout(request, response);
-      expect(request.logout).toHaveBeenCalledTimes(1);
-      expect(response.redirect).toHaveBeenCalledWith('/');
-    });
-  });
-
   describe('when in invite mode', () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -223,7 +206,7 @@ describe('Users controller', () => {
           usersController.register(notInvitedUser),
         ).rejects.toMatchObject({
           message: {
-            message: 'Email taken!',
+            message: 'Pending invite required!',
           },
         });
       });

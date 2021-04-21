@@ -144,6 +144,8 @@ export class UsersController {
           },
           false,
         );
+      } else if (existingUser) {
+        throw new MethodNotAllowedException('Email taken!');
       } else {
         throw new MethodNotAllowedException('Pending invite required!');
       }
